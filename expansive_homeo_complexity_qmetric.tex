@@ -143,6 +143,17 @@
   before skip=6pt, after skip=6pt,
 }
 
+% Light gray box for proofs
+\tcolorboxenvironment{proof}{
+  colback=black!3,
+  colframe=black!15,
+  boxrule=0.4pt,
+  arc=2pt,
+  breakable,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  before skip=8pt, after skip=8pt,
+}
+
 % Aliases so the rest of the document uses the same names
 \newenvironment{theorem}[1][]{\begin{theoreminner}[#1]}{\end{theoreminner}}
 \newenvironment{lemma}[1][]{\begin{lemmainner}[#1]}{\end{lemmainner}}
@@ -202,7 +213,7 @@
 
 \vspace{0.3cm}
 
-{\normalsize\color{accent!80!black}
+{\normalsize\color{red!70!black}
 \href{https://orcid.org/0000-0001-8128-9704}{\aiOrcid}%
 \enspace
 \href{https://arxiv.org/a/gaba_y_1.html}{\aiarXiv}%
