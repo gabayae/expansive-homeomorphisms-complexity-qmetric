@@ -598,7 +598,7 @@ is defined by
 \[
   d_\C(f,g)
   \;=\; \sum_{n=1}^{\infty} 2^{-n}\,
-    \max\!\Bigl\{0,\;\frac{1}{g(n)}-\frac{1}{f(n)}\Bigr\}.
+    \max\!\left\{0,\;\frac{1}{g(n)}-\frac{1}{f(n)}\right\}.
 \]
 \end{definition}
 
@@ -621,10 +621,10 @@ The following hold:
 \textbf{(i)}  Axiom~\ref{Q1}: $d_\C(f,f)=\sum 2^{-n}\max\{0,0\}=0$.
 The triangle inequality~\ref{Q2}: for each~$n$,
 \[
-  \max\Bigl\{0,\frac{1}{h(n)}-\frac{1}{f(n)}\Bigr\}
+  \max\left\{0,\frac{1}{h(n)}-\frac{1}{f(n)}\right\}
   \;\le\;
-  \max\Bigl\{0,\frac{1}{g(n)}-\frac{1}{f(n)}\Bigr\}
-  +\max\Bigl\{0,\frac{1}{h(n)}-\frac{1}{g(n)}\Bigr\},
+  \max\left\{0,\frac{1}{g(n)}-\frac{1}{f(n)}\right\}
+  +\max\left\{0,\frac{1}{h(n)}-\frac{1}{g(n)}\right\},
 \]
 since the positive part is subadditive.  Multiplying by $2^{-n}$ and
 summing gives $d_\C(f,h)\le d_\C(f,g)+d_\C(g,h)$.  Axiom~\ref{Q3}:
@@ -634,7 +634,7 @@ for all~$n$, so $f=g$.
 \textbf{(ii)}  $d_\C(f,g)=0$ iff each term is zero, iff
 $1/g(n)\le 1/f(n)$ for all~$n$, iff $f(n)\le g(n)$.
 
-\textbf{(iii)}  Each term $2^{-n}\max\{0,1/g(n)-1/f(n)\}\le
+\textbf{(iii)}  Each term $2^{-n}\max\left\{0,\,1/g(n)-1/f(n)\right\}\le
 2^{-n}\cdot 1/g(n)\le 2^{-n}$, so $d_\C(f,g)\le\sum_{n=1}^\infty
 2^{-n}=1$.
 \end{proof}
@@ -688,7 +688,7 @@ $n\ge 1$, Theorem~\ref{thm:dc-props}(ii) gives $d_\C(f,g)=0$.
 In the reverse direction,
 \[
   d_\C(g,f)
-  = \sum_{n=1}^{\infty}2^{-n}\max\Bigl\{0,\frac{1}{n}-\frac{1}{n^2}\Bigr\}
+  = \sum_{n=1}^{\infty}2^{-n}\max\!\left\{0,\frac{1}{n}-\frac{1}{n^2}\right\}
   = \sum_{n=2}^{\infty}2^{-n}\cdot\frac{n-1}{n^2},
 \]
 since the $n=1$ term vanishes ($\frac{1}{1}-\frac{1}{1}=0$).
@@ -799,7 +799,7 @@ and symmetrization.
 The conjugate of the complexity quasi-metric is
 \[
   d_\C^t(f,g) \;=\; d_\C(g,f)
-  \;=\; \sum_{n=1}^{\infty}2^{-n}\max\Bigl\{0,\frac{1}{f(n)}-\frac{1}{g(n)}\Bigr\}.
+  \;=\; \sum_{n=1}^{\infty}2^{-n}\max\!\left\{0,\frac{1}{f(n)}-\frac{1}{g(n)}\right\}.
 \]
 The symmetrization is $d_\C^s(f,g)=\max\{d_\C(f,g),d_\C(g,f)\}$.
 \end{proposition}
@@ -978,7 +978,7 @@ fixed constant $c>0$.  Since $\phi_c^k(f)(n)=f(n)+kc$, we compute:
 \[
   d_\C(\phi_c^k(f),\phi_c^k(g))
   = \sum_{n=1}^\infty 2^{-n}
-    \max\Bigl\{0,\frac{1}{g(n)+kc}-\frac{1}{f(n)+kc}\Bigr\}.
+    \max\!\left\{0,\frac{1}{g(n)+kc}-\frac{1}{f(n)+kc}\right\}.
 \]
 For large $|k|$, the terms $1/(f(n)+kc)$ and $1/(g(n)+kc)$ both
 tend to zero (if $k\to+\infty$) or become undefined (if $kc$ is
@@ -1073,10 +1073,10 @@ For any $\alpha>0$ and any $f,g\in\C$,
 We compute directly:
 \begin{align*}
   d_\C(\psi_\alpha(f),\psi_\alpha(g))
-  &= \sum_{n=1}^{\infty}2^{-n}\max\Bigl\{0,
-     \frac{1}{\alpha g(n)}-\frac{1}{\alpha f(n)}\Bigr\}\\
+  &= \sum_{n=1}^{\infty}2^{-n}\max\!\left\{0,
+     \frac{1}{\alpha g(n)}-\frac{1}{\alpha f(n)}\right\}\\
   &= \sum_{n=1}^{\infty}2^{-n}\cdot\frac{1}{\alpha}\,
-     \max\Bigl\{0,\frac{1}{g(n)}-\frac{1}{f(n)}\Bigr\}
+     \max\!\left\{0,\frac{1}{g(n)}-\frac{1}{f(n)}\right\}
   \;=\;\frac{1}{\alpha}\,d_\C(f,g). \qedhere
 \end{align*}
 \end{proof}
@@ -1090,7 +1090,7 @@ Let $f(n)=n$, $g(n)=n^2$, and $\alpha=3$.  We have
 $d_\C(g,f)\approx 0.111$.  After scaling:
 $\psi_3(f)(n)=3n$ and $\psi_3(g)(n)=3n^2$.  Then
 $d_\C(\psi_3(g),\psi_3(f))=d_\C(3n^2,3n)
-=\sum_{n=1}^\infty 2^{-n}\max\{0,\frac{1}{3n}-\frac{1}{3n^2}\}
+=\sum_{n=1}^\infty 2^{-n}\max\!\left\{0,\frac{1}{3n}-\frac{1}{3n^2}\right\}
 =\frac{1}{3}\cdot d_\C(g,f)\approx 0.037$, which matches
 $\frac{1}{\alpha}\cdot 0.111=0.037$ exactly
 as confirmed by SageMath
