@@ -19,6 +19,33 @@
 \usepackage{academicons}
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable,skins}
+\usepackage{caption}
+\usepackage{titlesec}
+
+% ── Color palette ──
+\definecolor{accent}{HTML}{2B4C7E}      % deep blue
+\definecolor{accentlight}{HTML}{E8EEF6}  % very light blue
+\definecolor{thmcolor}{HTML}{1B6B4A}     % dark teal (theorems)
+\definecolor{defcolor}{HTML}{7B3F00}     % warm brown (definitions)
+\definecolor{excolor}{HTML}{4A4A8A}      % muted indigo (examples)
+\definecolor{remcolor}{HTML}{606060}      % neutral gray (remarks)
+
+% ── Section heading style ──
+\titleformat{\section}
+  {\Large\bfseries\color{accent}}
+  {\thesection}{0.8em}{}
+  [\vspace{-0.6em}{\color{accent}\rule{\textwidth}{0.6pt}}]
+\titleformat{\subsection}
+  {\large\bfseries\color{accent!80!black}}
+  {\thesubsection}{0.7em}{}
+
+% ── Caption style ──
+\captionsetup{
+  font=small,
+  labelfont={bf,color=accent},
+  textfont={color=black!80},
+  margin=1em,
+}
 
 % ── Repository URL ──
 \newcommand{\repourl}{https://github.com/guydev42/expansive-homeomorphisms-complexity-qmetric}
@@ -34,9 +61,9 @@
 % ── Running headers/footers ──
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small\itshape Expansive homeomorphisms on complexity quasi-metric spaces}
-\fancyhead[R]{\small\thepage}
-\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\color{accent}\itshape Expansive homeomorphisms on complexity quasi-metric spaces}
+\fancyhead[R]{\small\color{accent}\thepage}
+\renewcommand{\headrule}{{\color{accent}\hrule width\headwidth height 0.4pt}}
 \renewcommand{\footrulewidth}{0pt}
 
 % Title page style (no header)
@@ -49,34 +76,81 @@
 
 % ── Highlighted box for key insights ──
 \newtcolorbox{insightbox}[1][]{
-  colback=blue!3,
-  colframe=blue!40!black,
+  colback=accent!4,
+  colframe=accent,
   fonttitle=\bfseries,
   title={#1},
   boxrule=0.5pt,
-  arc=2pt,
+  arc=3pt,
   breakable,
+  left=6pt, right=6pt,
 }
 
 \newtcolorbox{keyresult}[1][]{
-  colback=green!3,
-  colframe=green!50!black,
-  fonttitle=\bfseries,
+  colback=thmcolor!4,
+  colframe=thmcolor,
+  fonttitle=\bfseries\color{thmcolor},
   title={#1},
   boxrule=0.5pt,
-  arc=2pt,
+  arc=3pt,
 }
 
-% ── Theorem environments ──
+% ── Theorem environments (with subtle left-bar styling) ──
 \theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{theoreminner}{Theorem}[section]
+\newtheorem{lemmainner}[theoreminner]{Lemma}
+\newtheorem{propositioninner}[theoreminner]{Proposition}
+\newtheorem{corollaryinner}[theoreminner]{Corollary}
 \theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definitioninner}[theoreminner]{Definition}
+\newtheorem{exampleinner}[theoreminner]{Example}
+\newtheorem{remarkinner}[theoreminner]{Remark}
+
+% Wrap each in a tcolorbox with a colored left bar
+\tcolorboxenvironment{theoreminner}{
+  blanker, breakable,
+  left=4pt, borderline west={2.5pt}{0pt}{thmcolor},
+  before skip=8pt, after skip=8pt,
+}
+\tcolorboxenvironment{lemmainner}{
+  blanker, breakable,
+  left=4pt, borderline west={2.5pt}{0pt}{thmcolor!70},
+  before skip=8pt, after skip=8pt,
+}
+\tcolorboxenvironment{propositioninner}{
+  blanker, breakable,
+  left=4pt, borderline west={2.5pt}{0pt}{thmcolor!70},
+  before skip=8pt, after skip=8pt,
+}
+\tcolorboxenvironment{corollaryinner}{
+  blanker, breakable,
+  left=4pt, borderline west={2.5pt}{0pt}{thmcolor!50},
+  before skip=8pt, after skip=8pt,
+}
+\tcolorboxenvironment{definitioninner}{
+  blanker, breakable,
+  left=4pt, borderline west={2.5pt}{0pt}{defcolor},
+  before skip=8pt, after skip=8pt,
+}
+\tcolorboxenvironment{exampleinner}{
+  blanker, breakable,
+  left=4pt, borderline west={2pt}{0pt}{excolor!60},
+  before skip=8pt, after skip=8pt,
+}
+\tcolorboxenvironment{remarkinner}{
+  blanker, breakable,
+  left=4pt, borderline west={1.5pt}{0pt}{remcolor!40},
+  before skip=6pt, after skip=6pt,
+}
+
+% Aliases so the rest of the document uses the same names
+\newenvironment{theorem}[1][]{\begin{theoreminner}[#1]}{\end{theoreminner}}
+\newenvironment{lemma}[1][]{\begin{lemmainner}[#1]}{\end{lemmainner}}
+\newenvironment{proposition}[1][]{\begin{propositioninner}[#1]}{\end{propositioninner}}
+\newenvironment{corollary}[1][]{\begin{corollaryinner}[#1]}{\end{corollaryinner}}
+\newenvironment{definition}[1][]{\begin{definitioninner}[#1]}{\end{definitioninner}}
+\newenvironment{example}[1][]{\begin{exampleinner}[#1]}{\end{exampleinner}}
+\newenvironment{remark}[1][]{\begin{remarkinner}[#1]}{\end{remarkinner}}
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -89,9 +163,9 @@
 
 \hypersetup{
     colorlinks=true,
-    linkcolor=blue!70!black,
-    citecolor=green!50!black,
-    urlcolor=purple,
+    linkcolor=accent,
+    citecolor=thmcolor,
+    urlcolor=excolor,
     hypertexnames=false
 }
 
@@ -104,16 +178,23 @@
 \begin{titlepage}
 \thispagestyle{titlepage}
 \centering
-\vspace*{0.8cm}
+\vspace*{0.6cm}
 
-{\huge\bfseries Expansive homeomorphisms on\\[0.5em]
+{\color{accent}\rule{0.4\textwidth}{0.8pt}}
+
+\vspace{0.8cm}
+
+{\huge\bfseries\color{accent} Expansive homeomorphisms on\\[0.5em]
  complexity quasi-metric spaces}
 
-\vspace{0.4cm}
-{\Large\itshape A bridge between dynamical systems\\[0.2em]
+\vspace{0.5cm}
+{\Large\itshape\color{accent!70!black} A bridge between dynamical systems\\[0.2em]
  and computational complexity theory}
 
-\vspace{1.0cm}
+\vspace{0.3cm}
+{\color{accent}\rule{0.25\textwidth}{0.5pt}}
+
+\vspace{0.8cm}
 
 {\large
 \textbf{Ya\'e U.\ Gaba}$^{\dagger,\ddagger,\S}$
@@ -121,7 +202,7 @@
 
 \vspace{0.3cm}
 
-{\normalsize
+{\normalsize\color{accent!80!black}
 \href{https://orcid.org/0000-0001-8128-9704}{\aiOrcid}%
 \enspace
 \href{https://arxiv.org/a/gaba_y_1.html}{\aiarXiv}%
@@ -139,7 +220,7 @@ South Africa\\[0.3em]
 $^{\S}$\,African Center for Advanced Studies (ACAS), Cameroon
 }
 
-\vspace{1.8cm}
+\vspace{1.5cm}
 \begin{abstract}
 \noindent
 The complexity quasi-metric, introduced by Schellekens,
