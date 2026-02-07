@@ -270,6 +270,18 @@ stable and unstable sets; canonical coordinates
 \end{titlepage}
 \pagenumbering{arabic}
 
+\vspace*{0.5cm}
+\begin{flushright}
+\begin{minipage}{0.72\textwidth}
+\raggedleft\itshape\color{accent!80!black}
+``The study of iteration, the study of the behaviour of a transformation
+when it is repeated, is the fundamental problem of dynamics.''
+\vspace{0.3em}
+
+\upshape\color{accent!60!black}--- Henri Poincar\'e
+\end{minipage}
+\end{flushright}
+\vspace{0.8cm}
 
 % ═══════════════════════════════════════════════════════════════
 \section{Introduction: where dynamics meets computation}
@@ -1765,13 +1777,38 @@ A Python implementation is given in
 \label{sec:hyperbolicity}
 % ═══════════════════════════════════════════════════════════════
 
-The classical theory of hyperbolic dynamics, developed by
-Bowen~\cite{bowen1975} and extended by Reddy~\cite{reddy1983},
-shows that expansive homeomorphisms with
-``canonical coordinates'' exhibit exponential contraction along
-stable manifolds and exponential expansion along unstable
-manifolds.  We now establish the precise form of this
-hyperbolicity for the scaling transformation.
+\subsection{Background}
+
+In classical smooth dynamics, hyperbolicity is the organizing
+principle behind much of the rich behaviour observed in chaotic
+systems.  A diffeomorphism on a compact manifold is called
+\emph{hyperbolic} (or \emph{Anosov}) when the tangent bundle
+splits into stable and unstable sub-bundles along which the
+derivative contracts and expands, respectively.  Bowen's
+foundational monograph~\cite{bowen1975} showed that Anosov
+diffeomorphisms admit Markov partitions and satisfy strong
+statistical properties---including the existence of equilibrium
+states and precise entropy formulas---making hyperbolicity a
+cornerstone of ergodic theory.
+
+Reddy~\cite{reddy1983} later proved that these conclusions extend
+far beyond the smooth setting: any expansive homeomorphism on a
+compact metric space that admits \emph{canonical coordinates}---a
+local product structure in which nearby points can be uniquely
+decomposed along stable and unstable directions---is necessarily
+hyperbolic.  More precisely, Reddy's theorem guarantees that the
+canonical coordinate map exhibits exponential contraction along
+one factor and exponential expansion along the other.
+
+The complexity quasi-metric space $(\C,d_\C)$ is not a compact
+metric space, and the quasi-metric $d_\C$ is not symmetric, so
+neither Bowen's smooth theory nor Reddy's topological
+generalization applies directly.  Nevertheless, the explicit
+algebraic structure of the scaling transformation $\psi_\alpha$
+allows us to verify hyperbolicity by a direct computation.  The
+result is, in fact, stronger than what the classical theory
+provides: we obtain \emph{exact} geometric decay and growth
+(with constant $C=1$), rather than merely exponential bounds.
 
 \subsection{Statement and proof}
 
