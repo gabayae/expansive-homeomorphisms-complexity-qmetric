@@ -1,0 +1,37 @@
+
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+
+# Compiled PDF (uncomment to track it)
+# paper/*.pdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# SageMath
+*.sage.py
+
+# OS files
+.DS_Store
+Thumbs.db
+nul
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
