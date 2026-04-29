@@ -48,7 +48,7 @@
 }
 
 % ── Repository URL ──
-\newcommand{\repourl}{https://github.com/guydev42/expansive-homeomorphisms-complexity-qmetric}
+\newcommand{\repourl}{https://github.com/gabayae/expansive-homeomorphisms-complexity-qmetric}
 
 % ── Small margins, small interlines ──
 \geometry{a4paper, left=0.85in, right=0.85in, top=1.0in, bottom=0.95in,
@@ -234,29 +234,27 @@ $^{\S}$\,African Center for Advanced Studies (ACAS), Cameroon
 \vspace{1.5cm}
 \begin{abstract}
 \noindent
-The complexity quasi-metric, introduced by Schellekens,
-provides a topological framework where the asymmetric nature of
-computational comparisons---stating that one algorithm is faster than
-another carries different information than stating the second is slower
-than the first---finds precise mathematical expression.
-In this paper we develop a comprehensive theory of expansive
-homeomorphisms on complexity quasi-metric spaces.
-Our central result establishes that the scaling transformation
-$\psi_\alpha(f)(n)=\alpha f(n)$ is expansive on the complexity space
-$(\C,d_\C)$ if and only if $\alpha\neq 1$.
-The $\delta$-stable sets arising from this dynamics correspond exactly
-to asymptotic complexity classes, providing a dynamical characterisation
-of fundamental objects in complexity theory.
-We prove that the canonical coordinates associated with $\psi_\alpha$
-are hyperbolic with contraction rate $\lambda=1/\alpha$ and establish
-a precise connection between orbit separation in the dynamical system
-and the classical time hierarchy theorem of Hartmanis and Stearns.
-We further investigate unstable sets, conjugate dynamics, and
-topological entropy estimates for the scaling map.
-Throughout, concrete algorithms and Python implementations accompany
-the proofs, making every result computationally reproducible.
-SageMath verification snippets are inlined alongside the examples,
-and the full code is available in the companion repository.
+The complexity quasi-metric of Schellekens is a topological
+framework in which the asymmetry of computational comparisons
+---``$A$ is at most as fast as $B$'' carrying different information
+than ``$B$ is at most as slow as $A$''---is built into the distance
+itself.  This paper develops the theory of expansive homeomorphisms
+on the resulting space.  The central result is that the scaling
+transformation $\psi_\alpha(f)(n)=\alpha f(n)$ is expansive on the
+complexity space $(\C,d_\C)$ if and only if $\alpha\neq 1$.
+The $\delta$-stable sets of this dynamics turn out to coincide
+with asymptotic complexity classes, giving a dynamical
+characterisation of objects familiar from complexity theory.
+We then show that the canonical coordinates of $\psi_\alpha$ are
+hyperbolic with contraction rate $\lambda=1/\alpha$, and we
+connect orbit separation in the dynamical system to the classical
+time hierarchy theorem of Hartmanis and Stearns.  Unstable sets,
+conjugate dynamics, and topological entropy estimates for the
+scaling map are also worked out.  Concrete algorithms and Python
+implementations accompany every proof, so each result can be
+checked computationally; SageMath snippets sit alongside the
+examples, and the full code is in the
+\href{\repourl}{companion repository}.
 
 \medskip
 \textbf{Keywords:} Expansive homeomorphism; complexity quasi-metric;
@@ -290,15 +288,10 @@ when it is repeated, is the fundamental problem of dynamics.''
 
 \subsection{A tale of two theories}
 
-Mathematics draws much of its power from unexpected bridges between
-seemingly distant subjects.  Fourier analysis connects the study of
-heat flow to number theory; ergodic theory links statistical mechanics
-to measure-preserving transformations; and category theory reveals
-shared structure across algebra, topology, and logic.  This paper
-explores another such bridge: between \emph{dynamical systems}---the
-study of how systems evolve over time---and \emph{computational
-complexity theory}---the study of the intrinsic difficulty of
-computational problems.
+This paper builds a bridge between two subjects that rarely meet:
+\emph{dynamical systems}, which studies how a system evolves under
+iteration, and \emph{computational complexity theory}, which studies
+the resources required to solve computational problems.
 
 At first glance these two fields appear to have little in common.
 Dynamical systems theory asks: given a map $\psi\colon X\to X$,
@@ -309,20 +302,18 @@ other hand, asks: given a computational problem, how do the resources
 required to solve it---time, memory, communication---grow with the
 input size~$n$?
 
-The key observation that connects these two worlds is that
-\emph{complexity comparisons are inherently asymmetric}.  Saying
-``algorithm~$A$ is at most as fast as algorithm~$B$'' is not the
-same as saying ``algorithm~$B$ is at most as slow as algorithm~$A$.''
-More precisely, if $f(n)\le g(n)$ for all~$n$ (so that $f$~is at
-least as fast as~$g$), the ``cost'' of moving from $f$ to~$g$ in the
-complexity landscape is zero---we are moving to a slower algorithm,
-which is easy to simulate---but the cost of moving from $g$ to~$f$ is
-positive, because improving an algorithm's running time requires
-genuine insight.
+What links the two worlds is that complexity comparisons are
+asymmetric.  Saying ``algorithm~$A$ is at most as fast as
+algorithm~$B$'' does not say the same thing as ``algorithm~$B$
+is at most as slow as algorithm~$A$.''  If $f(n)\le g(n)$ for
+all~$n$ (so that $f$ is at least as fast as~$g$), the ``cost'' of
+moving from $f$ to~$g$ is zero---going to a slower algorithm is
+easy to simulate---but the cost of moving from $g$ to~$f$ is
+positive, because shaving time off a running algorithm takes real
+insight.
 
-This asymmetry is captured perfectly by the mathematical notion of a
-\emph{quasi-metric}: a distance function $q$ where $q(x,y)$ need not
-equal $q(y,x)$.  Schellekens~\cite{schellekens1995} introduced the
+This asymmetry is what a \emph{quasi-metric} captures: a distance
+function $q$ where $q(x,y)$ need not equal $q(y,x)$.  Schellekens~\cite{schellekens1995} introduced the
 \emph{complexity quasi-metric} $d_\C$ on the space of functions
 $f\colon\N\to(0,\infty)$ and showed that its topological properties
 encode fundamental features of computational complexity.  Romaguera
@@ -338,11 +329,10 @@ Otafudu, Matladi, and Zweni~\cite{olela2024} extended the theory of
 expansive homeomorphisms to quasi-metric spaces, opening the door to
 applications in asymmetric settings.
 
-Our contribution is to walk through that door and apply the theory of
-expansive homeomorphisms to the complexity quasi-metric space.  The
-results reveal that basic dynamical concepts---orbits, stable sets,
-hyperbolicity---have direct and illuminating counterparts in
-complexity theory.
+Our contribution is to walk through that door: to apply the theory
+of expansive homeomorphisms to the complexity quasi-metric space.
+Basic dynamical concepts---orbits, stable sets, hyperbolicity---turn
+out to have direct counterparts in complexity theory.
 
 \paragraph{Related work.}
 The complexity quasi-metric space was introduced by
@@ -365,15 +355,12 @@ K\"unzi~\cite{kunzi1995,kunzi2001} provided a comprehensive
 account of the topology of quasi-metric spaces, which underpins
 the present work.
 
-The novelty of our approach lies in the \emph{combination} of
-these two lines of research: whereas~\cite{olela2024} develops
-the abstract theory without a specific quasi-metric space in mind,
-and~\cite{schellekens1995,romaguera1999} study the complexity
-space without dynamical-systems tools, we bring the two together
-and show that the resulting interplay yields concrete insights
-in both directions---dynamical concepts acquire computational
-meaning, and complexity-theoretic distinctions acquire dynamical
-characterisations.
+What is new here is the \emph{combination}: \cite{olela2024}
+develops the abstract theory without any specific quasi-metric
+space in mind, while \cite{schellekens1995,romaguera1999} study
+the complexity space without dynamical-systems tools.  Bringing
+the two together gives dynamical concepts a computational meaning
+and gives complexity-theoretic distinctions a dynamical form.
 
 \begin{figure}[H]
 \centering
@@ -428,8 +415,7 @@ distance.}
 
 \subsection{Why quasi-metrics?}
 
-Before we proceed, let us briefly motivate why quasi-metrics---rather
-than ordinary metrics---are the right tool for this investigation.
+Why quasi-metrics rather than ordinary metrics?  The reason is short.
 
 In a standard metric space $(X,d)$, the symmetry axiom $d(x,y)=d(y,x)$
 ensures that the cost of moving from~$x$ to~$y$ is the same as the
@@ -485,20 +471,19 @@ distance to encode directional information.}
 
 \subsection{Overview of main results}
 
-We now give a roadmap of the paper and preview our main contributions.
-The reader may find it helpful to refer back to this summary as the
-technical details unfold.
+Here is a preview of the main results; the reader may want to come
+back to this summary while working through the technical sections.
 
-Our first result characterises exactly when the scaling transformation
-is expansive.
+The first result characterises exactly when the scaling
+transformation is expansive.
 
 \begin{keyresult}[Theorem~\ref{thm:main-scaling}: Expansiveness of scaling]
 The scaling map $\psi_\alpha(f)(n)=\alpha f(n)$ is expansive on the
 complexity space $(\C,d_\C)$ if and only if $\alpha\neq 1$.
 \end{keyresult}
 
-Our second result reveals that the stable sets of this dynamics have a
-beautiful complexity-theoretic interpretation.
+The second result gives the stable sets of this dynamics a clean
+complexity-theoretic interpretation.
 
 \begin{keyresult}[Theorem~\ref{thm:stable-sets}: Stable sets are complexity classes]
 For $\alpha>1$, the $\delta$-stable set of $f$ under $\psi_\alpha$
@@ -506,15 +491,15 @@ coincides with the set $\{g: d_\C(f,g)\le\delta\}$, which contains
 all functions $g$ with $g(n)\ge f(n)$ for every~$n$.
 \end{keyresult}
 
-Our third result establishes a precise form of hyperbolicity.
+The third result is a precise form of hyperbolicity.
 
 \begin{keyresult}[Theorem~\ref{thm:hyperbolicity}: Hyperbolic canonical coordinates]
 The canonical coordinates of $\psi_\alpha$ ($\alpha>1$) exhibit
 exponential contraction with rate $\lambda=1/\alpha$ and constant $C=1$.
 \end{keyresult}
 
-Our fourth result connects the dynamical picture to a classical theorem
-in complexity theory.
+The fourth result connects the dynamical picture to a classical
+theorem in complexity theory.
 
 \begin{keyresult}[Theorem~\ref{thm:hierarchy}: Hierarchy as orbit separation]
 If $f(n)\log f(n)=o(g(n))$, then the orbits of $f$ and $g$ under
@@ -522,9 +507,9 @@ $\psi_\alpha$ separate in the symmetrized quasi-metric beyond every
 threshold.
 \end{keyresult}
 
-Each of these results is proved in detail and accompanied by an
-algorithm and a Python implementation.  All code is available in
-the companion repository.
+Each of these results is proved in detail, with an accompanying
+algorithm and a Python implementation; all code lives in the
+companion repository.
 
 \subsection{Organisation}
 
@@ -543,8 +528,8 @@ separation to the time hierarchy theorem.
 Section~\ref{sec:entropy} discusses topological entropy estimates.
 Section~\ref{sec:conclusion} summarises the results and poses open
 problems.  All Python implementations and SageMath verification
-scripts are available in the companion repository
-(\href{\repourl/tree/main/code}{\texttt{code/}} directory).
+scripts live in the \href{\repourl}{companion repository}
+(see the \href{\repourl/tree/main/code}{\texttt{code/}} directory).
 
 
 % ═══════════════════════════════════════════════════════════════
@@ -552,12 +537,11 @@ scripts are available in the companion repository
 \label{sec:quasi-metric}
 % ═══════════════════════════════════════════════════════════════
 
-We begin by recalling the foundational notion of a quasi-metric space.
-The theory of quasi-metric spaces has a long history, with major
-contributions by K\"unzi~\cite{kunzi1995, kunzi2001},
-Cobza\c{s}~\cite{cobzas2013}, and many others.  We follow the
-notation and conventions of Olela Otafudu et
-al.~\cite{olela2024}.
+We start by recalling the notion of a quasi-metric space.  The
+theory has a long history, with major contributions by
+K\"unzi~\cite{kunzi1995, kunzi2001},
+Cobza\c{s}~\cite{cobzas2013}, and others.  Notation and conventions
+follow Olela Otafudu et al.~\cite{olela2024}.
 
 \begin{definition}[Quasi-metric]\label{def:quasi-metric}
 Let $X$ be a non-empty set.  A function
@@ -573,8 +557,8 @@ The pair $(X,q)$ is called a \emph{quasi-metric space}.
 \end{definition}
 
 Notice that the only axiom ``missing'' compared with a metric is
-symmetry: we do \emph{not} require $q(x,y)=q(y,x)$.  This single
-change opens up a surprisingly rich theory.
+symmetry: we do \emph{not} require $q(x,y)=q(y,x)$.  Dropping that
+single axiom changes the theory more than one might expect.
 
 Every quasi-metric $q$ gives rise to two natural companions.
 
@@ -691,13 +675,12 @@ science~\cite{abramsky1994,scott1982}.
 \label{sec:complexity-space}
 % ═══════════════════════════════════════════════════════════════
 
-With the general theory in hand, we now turn to the specific
-quasi-metric space that lies at the heart of this paper.  The
-\emph{complexity space} was introduced by
+We now turn to the specific quasi-metric space this paper is
+about.  The \emph{complexity space} was introduced by
 Schellekens~\cite{schellekens1995} and further studied by Romaguera
-and Schellekens~\cite{romaguera1999}.  It provides a topological
+and Schellekens~\cite{romaguera1999}.  It is the topological
 framework in which the resource-usage functions associated with
-algorithms live naturally.
+algorithms live.
 
 \subsection{Definition and basic properties}
 
@@ -794,8 +777,7 @@ slower one is free ($d_\C=0$); the reverse direction is costly ($d_\C>0$).}
 
 \subsection{Illustrative examples}
 
-To build intuition, let us compute $d_\C$ for several pairs of
-common complexity functions.
+A few worked examples make the definition concrete.
 
 \begin{example}[Linear vs.\ quadratic]\label{ex:lin-quad}
 Let $f(n)=n$ and $g(n)=n^2$.  Since $f(n)\le g(n)$ for all
@@ -939,9 +921,10 @@ $d_\C(g,f)\approx 0.111$, so $d_\C^s(f,g)\approx 0.111$.
 
 \subsection{Computing the complexity quasi-metric}
 
-We now describe an algorithm for numerically approximating $d_\C(f,g)$.
-Since the series involves infinitely many terms, we truncate at
-$N$~terms; the exponential decay of $2^{-n}$ ensures rapid convergence.
+The following algorithm approximates $d_\C(f,g)$ numerically.
+Since the series has infinitely many terms, we truncate at
+$N$~terms; the exponential decay of $2^{-n}$ guarantees rapid
+convergence.
 
 \begin{algorithm}[H]
 \DontPrintSemicolon
@@ -979,10 +962,9 @@ exact verification throughout (see
 \label{sec:expansive}
 % ═══════════════════════════════════════════════════════════════
 
-We now turn to the dynamical ingredient of our theory.
-The notion of an expansive homeomorphism captures the idea that a
-map ``spreads things out'': no two distinct points can remain close
-forever under iteration.
+The dynamical side of the theory comes next.  An expansive
+homeomorphism is, roughly, a map that ``spreads things out'': no
+two distinct points stay close forever under iteration.
 
 \subsection{Definition and motivation}
 
@@ -1054,11 +1036,10 @@ homeomorphism.  Then:
 \end{enumerate}
 \end{theorem}
 
-Part~(i) is remarkable: it says that the direction of asymmetry does
-not matter for the \emph{existence} of expansive behaviour, although
-it may affect the value of the expansive constant.  Part~(ii) says
-that quasi-metric expansiveness is a strictly stronger property than
-metric expansiveness.
+Part~(i) is striking: the direction of asymmetry does not matter
+for whether expansive behaviour \emph{exists}, though it may
+change the expansive constant.  Part~(ii) says that quasi-metric
+expansiveness is strictly stronger than metric expansiveness.
 
 \begin{example}[Non-equivalence of (ii)]
 \label{ex:converse-false}
@@ -1138,10 +1119,10 @@ A Python implementation is given in
 \label{sec:scaling}
 % ═══════════════════════════════════════════════════════════════
 
-We now introduce the main dynamical actor: the \emph{scaling
-transformation} on the complexity space.  This is the simplest
-non-trivial transformation that respects the multiplicative structure
-of running-time functions.
+The main dynamical object of the paper is the \emph{scaling
+transformation} on the complexity space---the simplest non-trivial
+map that respects the multiplicative structure of running-time
+functions.
 
 \subsection{Definition and basic properties}
 
@@ -1234,9 +1215,8 @@ roles reverse.
 
 \subsection{Main theorem: Expansiveness of scaling}
 
-We are now ready to state and prove our main result.  The theorem
-asserts that the scaling map is expansive precisely when it is
-non-trivial.
+The main result says that the scaling map is expansive exactly
+when it is non-trivial.
 
 \begin{theorem}[Main theorem]\label{thm:main-scaling}
 The scaling transformation $\psi_\alpha$ is expansive on $(\C,d_\C)$
@@ -1499,11 +1479,10 @@ by $\log\alpha$
 \label{sec:stable-unstable}
 % ═══════════════════════════════════════════════════════════════
 
-The theory of expansive homeomorphisms naturally leads to the study
-of \emph{stable} and \emph{unstable sets}: the collections of
-points whose orbits remain close to a given orbit in forward or
-backward time, respectively.  In our setting, these sets will turn
-out to have a beautiful interpretation in terms of complexity classes.
+After expansiveness comes the study of \emph{stable} and
+\emph{unstable sets}: the points whose orbits stay close to a
+given orbit forward or backward in time.  In our setting these
+sets have a clean interpretation in terms of complexity classes.
 
 \subsection{Stable sets}
 
@@ -1518,7 +1497,7 @@ homeomorphism.  The \emph{$\delta$-stable set} of $f\in X$ is
 \end{definition}
 
 For the scaling transformation on the complexity space, the stable
-sets have a particularly clean description.
+sets are easy to describe.
 
 \begin{theorem}[Stable sets = complexity classes]\label{thm:stable-sets}
 For $\alpha>1$, the $\delta$-stable set of $f$ under $\psi_\alpha$
@@ -1641,16 +1620,15 @@ large~$n$, so $d_\C(h,f)>0$.
 \end{example}
 
 \begin{insightbox}[Duality of stable and unstable sets]
-The stable set captures functions \emph{close to or slower} than~$f$
-(a $d_\C$-neighbourhood), while the unstable set captures precisely
-the functions \emph{pointwise faster} than~$f$ (the zero-set of
-$d_\C(\cdot,f)$).  Note the asymmetry: stable sets depend on~$\delta$,
-but unstable sets do not.  This duality mirrors the conjugate
-relationship $d_\C\leftrightarrow d_\C^t$ and reflects the
-asymmetry of computational comparisons: forward iterates of
-$\psi_\alpha$ contract distances (preserving the stable
-neighbourhood), while backward iterates expand them (collapsing the
-unstable set to its core).
+The stable set contains the functions \emph{close to or slower}
+than~$f$ (a $d_\C$-neighbourhood); the unstable set contains
+exactly the functions \emph{pointwise faster} than~$f$ (the
+zero-set of $d_\C(\cdot,f)$).  Stable sets depend on~$\delta$;
+unstable sets do not.  The asymmetry tracks the conjugate pair
+$d_\C\leftrightarrow d_\C^t$: forward iterates of $\psi_\alpha$
+contract distances and preserve the stable neighbourhood, while
+backward iterates expand them and collapse the unstable set to
+its core.
 \end{insightbox}
 
 \begin{figure}[H]
@@ -1779,36 +1757,33 @@ A Python implementation is given in
 
 \subsection{Background}
 
-In classical smooth dynamics, hyperbolicity is the organizing
-principle behind much of the rich behaviour observed in chaotic
-systems.  A diffeomorphism on a compact manifold is called
+In classical smooth dynamics, hyperbolicity is the structural
+property that governs much of the chaotic behaviour one wants to
+understand.  A diffeomorphism on a compact manifold is
 \emph{hyperbolic} (or \emph{Anosov}) when the tangent bundle
-splits into stable and unstable sub-bundles along which the
-derivative contracts and expands, respectively.  Bowen's
-foundational monograph~\cite{bowen1975} showed that Anosov
-diffeomorphisms admit Markov partitions and satisfy strong
-statistical properties---including the existence of equilibrium
-states and precise entropy formulas---making hyperbolicity a
-cornerstone of ergodic theory.
+splits into stable and unstable sub-bundles, with the derivative
+contracting on one and expanding on the other.
+Bowen~\cite{bowen1975} showed that Anosov diffeomorphisms admit
+Markov partitions and satisfy strong statistical properties:
+equilibrium states exist and entropy formulas are exact.  This is
+why hyperbolicity occupies such a central place in ergodic theory.
 
-Reddy~\cite{reddy1983} later proved that these conclusions extend
-far beyond the smooth setting: any expansive homeomorphism on a
+Reddy~\cite{reddy1983} later showed that these conclusions extend
+beyond the smooth setting: any expansive homeomorphism on a
 compact metric space that admits \emph{canonical coordinates}---a
-local product structure in which nearby points can be uniquely
-decomposed along stable and unstable directions---is necessarily
-hyperbolic.  More precisely, Reddy's theorem guarantees that the
-canonical coordinate map exhibits exponential contraction along
-one factor and exponential expansion along the other.
+local product structure in which nearby points decompose uniquely
+along stable and unstable directions---is hyperbolic.  Reddy's
+theorem gives exponential contraction along one factor and
+exponential expansion along the other.
 
-The complexity quasi-metric space $(\C,d_\C)$ is not a compact
-metric space, and the quasi-metric $d_\C$ is not symmetric, so
-neither Bowen's smooth theory nor Reddy's topological
-generalization applies directly.  Nevertheless, the explicit
-algebraic structure of the scaling transformation $\psi_\alpha$
-allows us to verify hyperbolicity by a direct computation.  The
-result is, in fact, stronger than what the classical theory
-provides: we obtain \emph{exact} geometric decay and growth
-(with constant $C=1$), rather than merely exponential bounds.
+The complexity quasi-metric space $(\C,d_\C)$ is not compact and
+$d_\C$ is not symmetric, so neither Bowen's smooth theory nor
+Reddy's topological generalization applies directly.  However,
+the algebraic structure of $\psi_\alpha$ is explicit enough that
+hyperbolicity can be verified by a direct computation, and the
+result is in fact stronger than what the classical theory gives:
+we obtain \emph{exact} geometric decay and growth, with constant
+$C=1$, not just an exponential bound.
 
 \subsection{Statement and proof}
 
@@ -1918,13 +1893,13 @@ for verification.
 
 \subsection{Backward iterates: expansion}
 
-While forward iterates contract, backward iterates expand:
+Forward iterates contract; backward iterates expand:
 \[
   d_\C(\psi_\alpha^{-n}(f),\psi_\alpha^{-n}(g))
   = \alpha^n\,d_\C(f,g).
 \]
-This dual behaviour---contraction forward, expansion backward---is
-the hallmark of hyperbolic dynamics.
+Contraction in one time direction and expansion in the other is
+the defining feature of hyperbolic dynamics.
 
 \begin{corollary}\label{cor:backward-expansion}
 For $\alpha>1$ and $d_\C(f,g)>0$, the backward orbit distances
@@ -1985,18 +1960,16 @@ quasi-metric dynamics.
 \label{sec:hierarchy}
 % ═══════════════════════════════════════════════════════════════
 
-One of the most celebrated results in computational complexity
-theory is the \emph{time hierarchy theorem} of Hartmanis and
-Stearns~\cite{hartmanis1965}, which asserts that more time allows
-the solution of strictly more problems.  Specifically, if
-$f(n)\log f(n)=o(g(n))$, then
-$\mathrm{DTIME}(f(n))\subsetneq\mathrm{DTIME}(g(n))$: there are
-problems solvable in time $g(n)$ that cannot be solved in time
-$f(n)$.
+The \emph{time hierarchy theorem} of Hartmanis and
+Stearns~\cite{hartmanis1965} says that more time really does buy
+strictly more problems.  Specifically, if $f(n)\log f(n)=o(g(n))$,
+then $\mathrm{DTIME}(f(n))\subsetneq\mathrm{DTIME}(g(n))$: there
+are problems solvable in time $g(n)$ that cannot be solved in
+time $f(n)$.
 
-We now show that this classical result has a natural dynamical
-counterpart in our framework: the time hierarchy gap manifests as
-an orbit-separation property of the scaling transformation.
+That classical theorem has a clean dynamical counterpart: the
+hierarchy gap shows up as orbit separation under the scaling
+transformation.
 
 \begin{theorem}[Hierarchy as orbit separation]\label{thm:hierarchy}
 Let $f,g\colon\N\to(0,\infty)$ satisfy $f(n)\log f(n)=o(g(n))$.
@@ -2115,14 +2088,13 @@ eventually exceed any threshold~$\delta$.}
 \label{sec:entropy}
 % ═══════════════════════════════════════════════════════════════
 
-Topological entropy is a fundamental invariant of a dynamical
-system that measures the ``complexity of the dynamics''---the rate
-at which information about initial conditions is needed to predict
-the future.  For expansive homeomorphisms, topological entropy is
-always positive~\cite{bowen1975}.
+Topological entropy is the standard invariant for measuring the
+``complexity of the dynamics''---the rate at which information
+about initial conditions is needed to predict the future.  For
+expansive homeomorphisms, it is always positive~\cite{bowen1975}.
 
-We now estimate the topological entropy of $\psi_\alpha$ on a
-suitable subset of the complexity space.
+This section gives an entropy estimate for $\psi_\alpha$ on
+suitable subsets of the complexity space.
 
 \subsection{Setup and definition}
 
@@ -2318,9 +2290,9 @@ sets is given in
 \label{sec:conclusion}
 % ═══════════════════════════════════════════════════════════════
 
-In this paper we have developed a comprehensive theory of expansive
-homeomorphisms on the complexity quasi-metric space introduced by
-Schellekens.  Our main results are:
+This paper develops the theory of expansive homeomorphisms on
+the complexity quasi-metric space introduced by Schellekens.  The
+main results are:
 
 \begin{enumerate}[leftmargin=2em]
   \item \textbf{Expansiveness characterisation}
@@ -2339,9 +2311,9 @@ Schellekens.  Our main results are:
     symmetrized quasi-metric.
 \end{enumerate}
 
-These results demonstrate that the complexity quasi-metric space is
-a natural arena for applying dynamical-systems methods to
-computational complexity.
+Together, these results show that the complexity quasi-metric
+space is a workable setting for applying dynamical-systems methods
+to computational complexity.
 
 \medskip
 The following table summarises the correspondence between dynamical
