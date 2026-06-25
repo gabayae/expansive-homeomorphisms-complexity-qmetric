@@ -1,130 +1,91 @@
-# Expansive Homeomorphisms on Complexity Quasi-Metric Spaces
+# Expansive homeomorphisms on complexity quasi-metric spaces
 
-This repository contains the paper and accompanying code for *Expansive homeomorphisms on complexity quasi-metric spaces* by Ya'e U. Gaba.
+Paper and reproducibility code for the manuscript of the same title by
+[Yaé U. Gaba](mailto:yaeulrich.gaba@gmail.com).
 
-## TL;DR
+> **Compiled paper:** [`expansive_homeo_complexity_qmetric.pdf`](expansive_homeo_complexity_qmetric.pdf) — 26 pages
+> **arXiv build:** [`expansive_homeo_complexity_qmetric-arxiv.pdf`](expansive_homeo_complexity_qmetric-arxiv.pdf)
+> **Open problems / future directions:** [`OPEN-PROBLEMS.md`](OPEN-PROBLEMS.md)
+> **Source PDFs of cited foundational papers:** [`references/`](references/)
 
-We show that **scaling a function's running time** (multiplying by a constant $\alpha \neq 1$) is an **expansive homeomorphism** on the space of complexity functions. This single fact yields, via standard dynamical-systems machinery:
+---
 
-- **Stable sets = $d_\mathcal{C}$-neighbourhoods**: functions whose orbits stay close are exactly those within a quasi-metric ball.
-- **Exact contraction rate**: forward iterates contract $d_\mathcal{C}$ by exactly $1/\alpha$ per step, backward iterates expand by exactly $\alpha$ — no approximation, no hidden constants.
-- **Hierarchy theorem as orbit separation**: the classical time hierarchy theorem of Hartmanis–Stearns is recovered as a corollary of orbit separation under iteration.
-- **No non-trivial compact invariant sets**: $\psi_\alpha$ is a strict contraction on the symmetrised space, so the standard topological-entropy machinery on compact invariant sets does not apply — a structural limitation of the framework rather than an entropy bound.
+## What is in the paper
 
-In short: **dynamical systems and computational complexity share the same underlying geometry**, and the complexity quasi-metric is the right space to see it.
+The paper studies the dynamics of the *scaling transformation*
+$\psi_\alpha(f)(n) = \alpha f(n)$ on the complexity quasi-metric space
+$(\mathcal{C}, d_\mathcal{C})$ introduced by Schellekens (1995) and developed
+further by Romaguera and Schellekens (1999). The framework treats running-time
+profiles as points and equips them with an asymmetric distance reflecting the
+asymmetry of computational comparisons ("$f$ is at most as fast as $g$" is not
+the same statement as "$g$ is at most as slow as $f$").
 
-## Abstract
+The central result is that $\psi_\alpha$ is an expansive homeomorphism in the
+sense of [Olela-Otafudu–Matladi–Zweni (2024)](https://polipapers.upv.es/index.php/AGT/article/view/19855)
+exactly when $\alpha \neq 1$, with an exact contraction rate of $1/\alpha$ per
+forward iterate (constant $C = 1$). The paper derives the consequent
+characterisations of stable and unstable sets, a dynamical reading of the
+Hartmanis–Stearns time hierarchy, and a structural negative result for
+topological entropy: no non-trivial compact $\psi_\alpha$-invariant subset
+exists in the symmetrised space, so the standard Bowen entropy machinery does
+not apply.
 
-The complexity quasi-metric, introduced by Schellekens, provides a topological framework where the asymmetric nature of computational comparisons finds precise mathematical expression. In this paper we develop the theory of expansive homeomorphisms on complexity quasi-metric spaces. Our central result establishes that the scaling transformation $\psi_\alpha(f) = \alpha f$ is expansive if and only if $\alpha \neq 1$, with an exact contraction rate of $1/\alpha$ per forward iterate. We characterise the stable and unstable sets explicitly, connect orbit separation to the Hartmanis–Stearns time hierarchy theorem, and show that no non-trivial compact invariant sets exist — clarifying the structural limit of the topological-entropy framework in this setting.
-
-## Main results
-
-| # | Result | Statement |
-|---|--------|-----------|
-| 1 | **Expansiveness characterisation** (Theorem `thm:main-scaling`) | The scaling map $\psi_\alpha(f)(n) = \alpha f(n)$ is expansive on $(\mathcal{C}, d_\mathcal{C})$ if and only if $\alpha \neq 1$. |
-| 2 | **Stable sets** (Theorem `thm:stable-sets`) | The $\delta$-stable set of $f$ under $\psi_\alpha$ ($\alpha > 1$) coincides with the closed $d_\mathcal{C}$-ball $\{g : d_\mathcal{C}(f,g) \leq \delta\}$, and contains all functions pointwise dominated by $f$. |
-| 3 | **Unstable sets** (Theorem `thm:unstable-sets`) | The $\delta$-unstable set of $f$ consists of all $g$ with $d_\mathcal{C}(g,f) \leq \delta$. |
-| 4 | **Exact contraction rate** (Corollary `cor:exact-contraction`) | For all $\alpha > 0$ and $n \geq 0$: $d_\mathcal{C}(\psi_\alpha^n(f), \psi_\alpha^n(g)) = \alpha^{-n} \, d_\mathcal{C}(f,g)$, with optimal multiplicative constant $C = 1$. |
-| 5 | **Hierarchy as orbit separation** (Theorem `thm:hierarchy`) | Any pair $f, g \in \mathcal{C}$ with $d_\mathcal{C}(g,f) > 0$ has $d_\mathcal{C}^s$-separated orbits under $\psi_\alpha$, $\alpha \neq 1$. The standard Hartmanis–Stearns condition $f(n)\log f(n) = o(g(n))$ is one sufficient (not necessary) source of such pairs. |
-| 6 | **No non-trivial compact invariant sets** (Proposition `prop:no-compact-invariant`) | For $\alpha \neq 1$, every non-empty compact $\psi_\alpha$-invariant subset of $(\mathcal{C}, d_\mathcal{C}^s)$ has $d_\mathcal{C}^s$-diameter zero. |
-
-### Dynamics–complexity dictionary
-
-| Dynamical concept | Complexity interpretation |
-|---|---|
-| Quasi-metric $d_\mathcal{C}(f,g) = 0$ | $f$ is at least as fast as $g$ |
-| Scaling map $\psi_\alpha$ | Uniform speed change by factor $\alpha$ |
-| Expansiveness ($\alpha \neq 1$) | Orbits eventually separate |
-| $\delta$-stable set | $d_\mathcal{C}$-ball of asymptotically slower-or-equal functions |
-| Unstable set | $d_\mathcal{C}^t$-ball; pointwise-faster functions in particular |
-| Exact contraction | $d_\mathcal{C}$ decays as $(1/\alpha)^n$ |
-| Backward expansion | $d_\mathcal{C}$ grows as $\alpha^n$ |
-| Orbit separation | Hierarchy gap (sufficient but not necessary) |
-| No compact invariant sets | Standard entropy machinery does not apply |
-
-## Computed complexity distances
-
-| Function pair | $d_\mathcal{C}(f,g)$ | Closed form |
-|---|---|---|
-| $f(n)=n^2,\ g(n)=n$ | 0.1109 | $\ln 2 - \mathrm{Li}_2(1/2)$ |
-| $f(n)=2n,\ g(n)=n$ | 0.3466 | $\frac{1}{2}\ln 2$ |
-| $f(n)=n+1,\ g(n)=n$ | 0.3069 | — |
-| $f(n)=n,\ g(n)=\ln(n+1)$ | 0.4174 | — |
-| $f(n)=n^3,\ g(n)=n^2$ | 0.0450 | — |
-| $f(n)=n,\ g(n)=\sqrt{n}$ | 0.1130 | — |
-
-## Repository structure
+## Repository layout
 
 ```
-├── expansive_homeo_complexity_qmetric.tex        # LaTeX source (repo build)
-├── expansive_homeo_complexity_qmetric-arxiv.tex  # LaTeX source (arXiv build)
-├── expansive_homeo_complexity_qmetric.pdf        # Compiled PDF (repo)
-├── expansive_homeo_complexity_qmetric-arxiv.pdf  # Compiled PDF (arXiv)
-├── code/
-│   ├── python/                    # Python numerical implementations
-│   │   ├── quasi_metric.py        # Standard quasi-metric (Section 2)
-│   │   ├── complexity_distance.py # Complexity quasi-metric d_C (Section 3)
-│   │   ├── expansiveness_check.py # Expansive separation check (Section 4)
-│   │   ├── orbit_computation.py   # Orbit computation & plots (Section 5)
-│   │   ├── stable_set.py          # Stable/unstable set membership (Section 6)
-│   │   ├── hyperbolicity.py       # Exponential contraction (Section 7)
-│   │   ├── hierarchy_separation.py# Hierarchy separation iterate (Section 8)
-│   │   └── entropy_estimate.py    # Topological entropy estimate (Section 9)
-│   └── sagemath/                  # SageMath symbolic verifications
-│       ├── complexity_distances.sage   # Exact d_C values (Examples 3.3–3.7)
-│       ├── partial_sums.sage           # Convergence analysis (Example 5.5)
-│       ├── hyperbolic_contraction.sage # Contraction & expansion (Examples 7.7–7.10)
-│       ├── separation_iterates.sage    # Separation & hierarchy (Examples 5.14, 8.3)
-│       └── incomparable_functions.sage # Both directions positive (Example 3.7)
-├── README.md
-├── .gitignore
-└── LICENSE
+expansive_homeo_complexity_qmetric.tex        LaTeX source (repo build)
+expansive_homeo_complexity_qmetric-arxiv.tex  LaTeX source (arXiv build)
+expansive_homeo_complexity_qmetric.pdf        Compiled PDF (repo build)
+expansive_homeo_complexity_qmetric-arxiv.pdf  Compiled PDF (arXiv build)
+OPEN-PROBLEMS.md                              Future-work catalogue
+README.md                                     This file
+
+code/
+  python/    Numerical implementations (NumPy, Matplotlib)
+  sagemath/  Symbolic verifications (SageMath ≥ 9.0)
+
+references/
+  Schellekens-1995-Smyth-completion-...pdf
+  Romaguera-Schellekens-1999-Quasi-metric-properties-...pdf
+  NOTES.md   Literature conventions adopted in the paper
 ```
 
-## Requirements
+## Reproducing the computations
 
-### Python
-
-- Python 3.8+
-- NumPy
-- Matplotlib (for orbit visualisation)
+Every numerical claim and worked example in the paper is backed by a
+runnable script. The headline cross-checks:
 
 ```bash
-pip install numpy matplotlib
+# Lipschitz identity (Lemma 4.2) and backward expansion (Example 6.4):
+sage code/sagemath/hyperbolic_contraction.sage
+
+# d_C and d_C^t on representative pairs (Section 3 examples):
+sage code/sagemath/complexity_distances.sage
+
+# Orbit-separation iterate count (Section 5):
+python code/python/expansiveness_check.py
 ```
 
-### SageMath
+Each script is self-contained and prints its output to stdout; no input data
+is required.
 
-- [SageMath](https://www.sagemath.org/) >= 9.0
+## Citation
 
-## Running the code
-
-### Python
-
-Each Python script can be run standalone:
-
-```bash
-cd code/python
-python complexity_distance.py
-python expansiveness_check.py
-python orbit_computation.py
+```bibtex
+@unpublished{gaba2026expansive,
+  author = {Ya{\'e} U. Gaba},
+  title  = {Expansive homeomorphisms on complexity quasi-metric spaces},
+  year   = {2026},
+  note   = {Manuscript.
+            \url{https://github.com/gabayae/expansive-homeomorphisms-complexity-qmetric}},
+}
 ```
 
-The `complexity_distance.py` module is imported by other scripts, so run from the `code/python/` directory.
-
-### SageMath
-
-Each `.sage` file can be run directly with SageMath:
-
-```bash
-cd code/sagemath
-sage complexity_distances.sage
-sage partial_sums.sage
-sage hyperbolic_contraction.sage
-sage separation_iterates.sage
-sage incomparable_functions.sage
-```
+The arXiv identifier and DOI will be added here once available.
 
 ## License
 
-See [LICENSE](LICENSE) for details.
+A formal license file will be added shortly. In the meantime, the LaTeX
+sources and code in this repository are released for non-commercial
+scholarly use; the paper text will be governed by the publishing journal's
+terms once accepted.
