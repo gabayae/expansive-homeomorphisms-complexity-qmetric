@@ -516,11 +516,15 @@ Section~\ref{sec:stable-unstable} develops the theory of stable and
 unstable sets.  Section~\ref{sec:hyperbolicity} establishes
 hyperbolicity.  Section~\ref{sec:hierarchy} connects orbit
 separation to the time hierarchy theorem.
-Section~\ref{sec:entropy} discusses topological entropy estimates.
-Section~\ref{sec:conclusion} summarises the results and poses open
-problems.  All Python implementations and SageMath verification
-scripts live in the \href{\repourl}{companion repository}
-(see the \href{\repourl/tree/main/code}{\texttt{code/}} directory).
+Section~\ref{sec:entropy} treats compact invariant sets and the
+resulting obstruction to Bowen entropy.
+Section~\ref{sec:conclusion} summarises the results.  All Python
+implementations and SageMath verification scripts live in the
+\href{\repourl}{companion repository} (see the
+\href{\repourl/tree/main/code}{\texttt{code/}} directory); a list
+of open problems and directions for future work is maintained
+alongside the paper in
+\href{\repourl/blob/main/OPEN-PROBLEMS.md}{\texttt{OPEN-PROBLEMS.md}}.
 
 
 % ═══════════════════════════════════════════════════════════════
@@ -2277,7 +2281,7 @@ for the non-compact dynamics of $\psi_\alpha$ on all of $\C$.  On
 metric spaces, the variational principle equates topological entropy
 with the supremum of measure-theoretic entropies; an analogous
 quasi-metric version, if it could be established, might yield a
-non-trivial entropy for $\psi_\alpha|_\C$ (see Section~\ref{sec:conclusion}).
+non-trivial entropy for $\psi_\alpha|_\C$.
 \end{remark}
 
 An algorithm for numerically estimating the entropy via spanning
@@ -2286,7 +2290,7 @@ sets is given in
 
 
 % ═══════════════════════════════════════════════════════════════
-\section{Conclusion and open problems}
+\section{Conclusion}
 \label{sec:conclusion}
 % ═══════════════════════════════════════════════════════════════
 
@@ -2341,57 +2345,13 @@ No non-trivial compact invariant sets & Entropy of $\psi_\alpha|_K$ is zero & Pr
 \label{tab:dictionary}
 \end{table}
 
-\textbf{Open problems.}
-Several directions suggest themselves for future investigation.
-
-\emph{Topological entropy.}  Proposition~\ref{prop:no-compact-invariant}
-shows that compact $\psi_\alpha$-invariant sets are $d_\C^s$-trivial,
-so standard Bowen entropy vanishes on them.  Defining a meaningful
-entropy invariant for the non-compact dynamics of $\psi_\alpha$ on
-all of $\C$ --- for instance via asymmetric or volume-growth
-entropy analogues --- remains open.
-
-\emph{Non-linear transformations.}  The scaling map is linear in
-the function values.  It would be interesting to study non-linear
-transformations such as $\psi(f)(n)=f(n)^2$ or $\psi(f)(n)=f(f(n))$
-and determine when they are expansive.
-
-\emph{Space complexity.}  The complexity quasi-metric can be adapted
-to space (memory) complexity.  Do the results of this paper extend
-to that setting?
-
-\emph{Connections to domain theory.}  The complexity space has deep
-connections to domain theory~\cite{abramsky1994,scott1982}.  It
-would be valuable to understand the dynamical results of this paper
-in domain-theoretic terms.
-
-\emph{Stronger hierarchy results.}  Our
-Theorem~\ref{thm:hierarchy} connects orbit separation to the
-classical time hierarchy theorem.  Can stronger hierarchy-type
-results (e.g., the non-deterministic time hierarchy) be obtained
-by considering richer dynamical structures?
-
-\emph{Composition transformations.}  Instead of the multiplicative
-scaling $\psi_\alpha(f)(n)=\alpha f(n)$, one could study
-composition-based transformations such as
-$\phi(f)(n)=f(2n)$ (input doubling) or $\phi(f)(n)=f(n^2)$
-(input squaring).  These maps have a different algebraic structure
-and would connect to speed-up theorems in complexity theory.  Are
-they expansive on $(\C,d_\C)$?
-
-\emph{Weighted complexity quasi-metrics.}  Replacing the weight
-$2^{-n}$ in the definition of $d_\C$ by a general summable
-sequence $w_n>0$ yields a family of complexity quasi-metrics.
-Different weight sequences emphasise different input sizes.
-How do the dynamical properties of $\psi_\alpha$ depend on the
-choice of weights?
-
-\emph{Shadowing property.}  In classical hyperbolic dynamics,
-expansive homeomorphisms with the shadowing property are
-structurally stable.  Does $\psi_\alpha$ on $(\C,d_\C)$ possess
-the shadowing property?  If so, this would provide a strong
-robustness guarantee for the dynamical characterisation of
-complexity classes.
+A list of open problems and directions for future work --- including
+non-linear and composition-based variants of $\psi_\alpha$, weighted
+complexity quasi-metrics, the shadowing property, and the
+relationship to entropy on non-compact phase spaces --- is
+maintained alongside the paper in
+\href{\repourl/blob/main/OPEN-PROBLEMS.md}{\texttt{OPEN-PROBLEMS.md}}
+in the companion repository.
 
 \subsection*{Acknowledgements}
 
