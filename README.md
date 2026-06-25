@@ -1,12 +1,16 @@
 # Expansive homeomorphisms on complexity quasi-metric spaces
 
+[![arXiv](https://img.shields.io/badge/arXiv-2602.07685-b31b1b.svg)](https://arxiv.org/abs/2602.07685)
+[![Subjects](https://img.shields.io/badge/cs.CC-math.DS-1f6feb.svg)](https://arxiv.org/abs/2602.07685)
+
 Paper and reproducibility code for the manuscript of the same title by
 [Yaé U. Gaba](mailto:yaeulrich.gaba@gmail.com).
 
-> **Compiled paper:** [`expansive_homeo_complexity_qmetric.pdf`](expansive_homeo_complexity_qmetric.pdf) — 26 pages
-> **arXiv build:** [`expansive_homeo_complexity_qmetric-arxiv.pdf`](expansive_homeo_complexity_qmetric-arxiv.pdf)
-> **Open problems / future directions:** [`OPEN-PROBLEMS.md`](OPEN-PROBLEMS.md)
-> **Source PDFs of cited foundational papers:** [`references/`](references/)
+> **Preprint** — [arXiv:2602.07685](https://arxiv.org/abs/2602.07685) (v2, Apr 2026) · cs.CC / math.DS
+> **Compiled PDF (repo build)** — [`expansive_homeo_complexity_qmetric.pdf`](expansive_homeo_complexity_qmetric.pdf) — 26 pages
+> **Compiled PDF (arXiv build)** — [`expansive_homeo_complexity_qmetric-arxiv.pdf`](expansive_homeo_complexity_qmetric-arxiv.pdf)
+> **Open problems / future directions** — [`OPEN-PROBLEMS.md`](OPEN-PROBLEMS.md)
+> **Source PDFs of cited foundational papers** — [`references/`](references/)
 
 ---
 
@@ -72,16 +76,18 @@ is required.
 ## Citation
 
 ```bibtex
-@unpublished{gaba2026expansive,
-  author = {Ya{\'e} U. Gaba},
-  title  = {Expansive homeomorphisms on complexity quasi-metric spaces},
-  year   = {2026},
-  note   = {Manuscript.
-            \url{https://github.com/gabayae/expansive-homeomorphisms-complexity-qmetric}},
+@misc{gaba2026expansive,
+  author        = {Ya{\'e} U. Gaba},
+  title         = {Expansive homeomorphisms on complexity quasi-metric spaces},
+  year          = {2026},
+  eprint        = {2602.07685},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CC},
+  url           = {https://arxiv.org/abs/2602.07685},
 }
 ```
 
-The arXiv identifier and DOI will be added here once available.
+A journal-version BibTeX entry will be added here once the paper is accepted.
 
 ## License
 
