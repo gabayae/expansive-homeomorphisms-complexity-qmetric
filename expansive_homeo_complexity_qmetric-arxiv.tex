@@ -85,15 +85,6 @@
   left=6pt, right=6pt,
 }
 
-\newtcolorbox{keyresult}[1][]{
-  colback=thmcolor!4,
-  colframe=thmcolor,
-  fonttitle=\bfseries\color{thmcolor},
-  title={#1},
-  boxrule=0.5pt,
-  arc=3pt,
-}
-
 % ── Theorem environments (with subtle left-bar styling) ──
 \theoremstyle{plain}
 \newtheorem{theoreminner}{Theorem}[section]
@@ -165,11 +156,9 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
 \newcommand{\C}{\mathcal{C}}
 \newcommand{\BigO}{\mathcal{O}}
 \newcommand{\eps}{\varepsilon}
-\newcommand{\orb}{\mathrm{orb}}
 
 \hypersetup{
     colorlinks=true,
@@ -241,16 +230,17 @@ itself.  This paper develops the theory of expansive homeomorphisms
 on the resulting space.  The central result is that the scaling
 transformation $\psi_\alpha(f)(n)=\alpha f(n)$ is expansive on the
 complexity space $(\C,d_\C)$ if and only if $\alpha\neq 1$.
-The $\delta$-stable sets of this dynamics turn out to coincide
-with asymptotic complexity classes, giving a dynamical
-characterisation of objects familiar from complexity theory.
-We then show that $\psi_\alpha$ contracts $d_\C^s$-distances
-exactly by factor $1/\alpha$ per iterate, and we connect orbit
-separation to the classical time hierarchy theorem of Hartmanis
-and Stearns.  Unstable sets, conjugate dynamics, and a
-no-compact-invariant-set theorem (showing that the standard
-Bowen entropy is trivially zero on compact invariant sets) are
-also worked out.  Concrete algorithms and Python
+The $\delta$-stable sets coincide with closed
+$d_\C$-balls and contain, in particular, every function
+pointwise dominated by the basepoint.  We further establish the
+exact identity $d_\C^s(\psi_\alpha^n(f),\psi_\alpha^n(g))
+=\alpha^{-n}\,d_\C^s(f,g)$ for all $n\ge 0$ (so $\psi_\alpha$ acts
+as a strict $(1/\alpha)$-contraction on $d_\C^s$ for $\alpha>1$),
+and we connect orbit separation to the classical time hierarchy
+theorem of Hartmanis and Stearns.  Unstable sets, conjugate
+dynamics, and a no-compact-invariant-set result---showing that
+the standard Bowen entropy on compact invariant subsets of
+$(\C,d_\C^s)$ is necessarily trivial---are also worked out.  Concrete algorithms and Python
 implementations accompany every proof, so each result can be
 checked computationally; SageMath snippets sit alongside the
 examples, and the full code is in the
@@ -259,10 +249,10 @@ examples, and the full code is in the
 \medskip
 \textbf{Keywords:} Expansive homeomorphism; complexity quasi-metric;
 computational complexity; asymmetric topology; dynamical systems;
-stable and unstable sets; canonical coordinates
+stable and unstable sets
 
 \smallskip
-\textbf{2020 MSC:} 54H20; 37B20; 68Q25; 54E35
+\textbf{2020 MSC:} 54H20; 37B20; 68Q25; 54E15; 54E55
 \end{abstract}
 \vfill
 \end{titlepage}
@@ -347,7 +337,7 @@ substantially advanced by Bowen~\cite{bowen1975}, who connected
 expansiveness to topological entropy, and Reddy~\cite{reddy1983},
 who established canonical coordinate systems for expansive maps.
 The extension of expansive homeomorphisms to quasi-metric spaces
-was carried out by Olela Otafudu, Matladi, and
+was carried out by Olela-Otafudu, Matladi, and
 Zweni~\cite{olela2024}, who proved that $q$-expansiveness and
 $q^t$-expansiveness are equivalent and developed the abstract
 theory of stable and unstable sets in the asymmetric setting.
@@ -542,7 +532,7 @@ We start by recalling the notion of a quasi-metric space.  The
 theory has a long history, with major contributions by
 K\"unzi~\cite{kunzi1995, kunzi2001},
 Cobza\c{s}~\cite{cobzas2013}, and others.  Notation and conventions
-follow Olela Otafudu et al.~\cite{olela2024}.
+follow Olela-Otafudu et al.~\cite{olela2024}.
 
 \begin{definition}[Quasi-metric]\label{def:quasi-metric}
 Let $X$ be a non-empty set.  A function
@@ -925,10 +915,11 @@ from $f$ to $g$ is ``free.''  In the reverse direction the $n=1$ term vanishes
   \;=\; \tfrac{1}{2}\sum_{m=1}^\infty m\cdot 2^{-m}
   \;=\; 1.
 \]
-This saturates the bound $d_\C(g,f)\le w_\C(g)=1$ on the subspace
-$\C_{\ge 1}$, and witnesses the asymmetry: the cost of swapping a
-faster function for a slower one is bounded by the weight of the
-target, with equality possible.
+This saturates the universal bound $d_\C(g,f)\le w_\C(g)$ of
+Theorem~\ref{thm:dc-props}(iii); here $g\in\C_{\ge 1}$, so
+$w_\C(g)=1$.  The example witnesses the asymmetry: the cost of
+swapping a faster function for a slower one is bounded by the
+weight of the target, with equality possible.
 \end{example}
 
 \subsection{The conjugate and symmetrized complexity distances}
@@ -1019,7 +1010,7 @@ every pair of distinct points $x\neq y$, some iterate $\psi^n$
 separates them by more than~$\delta$.  The constant~$\delta$ is
 called the \emph{expansive constant}.
 
-Olela Otafudu et al.~\cite{olela2024} extended this to
+Olela-Otafudu et al.~\cite{olela2024} extended this to
 quasi-metric spaces, where the asymmetry of the distance introduces
 new subtleties.
 
@@ -1270,9 +1261,11 @@ particular, $\psi_\alpha$ is a $\tau_{d_\C^s}$-homeomorphism.
 \end{lemma}
 
 \begin{proof}
-The inverse identity $\psi_\alpha\circ\psi_{1/\alpha}=\mathrm{id}$
-is immediate.  By Lemma~\ref{lem:scaling-lip} applied to both
-$d_\C$ and $d_\C^t$,
+First, $\psi_\alpha$ maps $\C$ to itself: for $f\in\C$,
+$\sum_{n\ge 1}2^{-n}/(\alpha f(n))=(1/\alpha)\sum_{n\ge 1}2^{-n}/f(n)
+<\infty$, so $\psi_\alpha(f)\in\C$.  The inverse identity
+$\psi_\alpha\circ\psi_{1/\alpha}=\mathrm{id}$ is immediate.  By
+Lemma~\ref{lem:scaling-lip} applied to both $d_\C$ and $d_\C^t$,
 $d_\C^s(\psi_\alpha(f),\psi_\alpha(g))=(1/\alpha)d_\C^s(f,g)$,
 giving the Lipschitz bound with constant $1/\alpha$; the same
 applies to $\psi_{1/\alpha}$ with constant $\alpha$.  Both maps are
@@ -1295,17 +1288,25 @@ proposed~$\delta$; if $d_\C(f,g)=0$ but $d_\C(g,f)>0$ (i.e., $f$ is
 faster than~$g$), then $d_\C(\psi_1^n(f),\psi_1^n(g))=0$ for all~$n$
 and no separation occurs.  Hence $\psi_1$ is not expansive.
 
-\textbf{Case 2: $\alpha>1$.}  Take any $\delta\in(0,1)$.  Let
-$f\ne g$ in $\C$.  Since $(\C,d_\C^s)$ is a $T_0$ quasi-metric
-space, at least one of $d_\C(f,g)$ or $d_\C(g,f)$ is positive.
+\textbf{Case 2: $\alpha>1$.}  Take any $\delta\in(0,1)$ and let
+$f\ne g$ in $\C$.  Since $(\C,d_\C)$ is $T_0$, at least one of
+$d_\C(f,g)$ or $d_\C(g,f)$ is positive.  Note that
+$\psi_\alpha^{-1}=\psi_{1/\alpha}$, so iterating
+Lemma~\ref{lem:scaling-lip} with $\alpha\mapsto 1/\alpha$ gives,
+for all $h_1,h_2\in\C$ and all $k\ge 0$,
+\begin{equation}\label{eq:backward-iterate-bound}
+  d_\C\!\left(\psi_\alpha^{-k}(h_1),\,\psi_\alpha^{-k}(h_2)\right)
+  \;=\; \alpha^{k}\,d_\C(h_1,h_2).
+\end{equation}
 
-If $d_\C(f,g)>0$, apply Corollary~\ref{cor:backward-expansion} with
-the pair $(f,g)$: for some $k\ge 0$,
+If $d_\C(f,g)>0$, then~\eqref{eq:backward-iterate-bound} applied to
+$(h_1,h_2)=(f,g)$ gives some $k\ge 0$ with
 $d_\C(\psi_\alpha^{-k}(f),\psi_\alpha^{-k}(g))=\alpha^k d_\C(f,g)>\delta$,
 and Definition~\ref{def:expansive} is satisfied with $n=-k$.
 
-If instead $d_\C(f,g)=0$ but $d_\C(g,f)>0$, apply the same corollary
-to the pair $(g,f)$: for some $k\ge 0$,
+If instead $d_\C(f,g)=0$ but $d_\C(g,f)>0$, apply
+\eqref{eq:backward-iterate-bound} to $(h_1,h_2)=(g,f)$: for some
+$k\ge 0$,
 $d_\C(\psi_\alpha^{-k}(g),\psi_\alpha^{-k}(f))=\alpha^k d_\C(g,f)>\delta$.
 Since $d_\C(\psi_\alpha^{-k}(g),\psi_\alpha^{-k}(f))
 =d_\C^t(\psi_\alpha^{-k}(f),\psi_\alpha^{-k}(g))$, the symmetric
@@ -1783,8 +1784,10 @@ whenever $g(n)\ge 2^n$ for all~$n$, the stable set includes all
 super-exponential functions, such as $g(n)=3^n$, $g(n)=n!$, and
 $g(n)=2^{n^2}$.  However, $h(n)=n^{100}$ is NOT in the stable set:
 for large~$n$, $n^{100}<2^n$, so $d_\C(f,h)>0$.  The numerical
-value $d_\C(f,h)$ is extremely close to~$1$ (the maximum), reflecting
-the vast gap between polynomial and exponential growth.  This shows
+value $d_\C(f,h)$ is extremely close to~$1$ --- the maximum
+attainable on the subspace $\C_{\ge 1}$, in which $h$ lies since
+$h(n)=n^{100}\ge 1$ for all $n\ge 1$ --- reflecting the vast gap
+between polynomial and exponential growth.  This shows
 that even a degree-$100$ polynomial is far from the stable set of an
 exponential function.
 \end{example}
@@ -2148,7 +2151,7 @@ eventually exceed any threshold~$\delta$.}
 
 
 % ═══════════════════════════════════════════════════════════════
-\section{Topological entropy estimates}
+\section{Compact invariant sets and the entropy obstruction}
 \label{sec:entropy}
 % ═══════════════════════════════════════════════════════════════
 
@@ -2187,28 +2190,20 @@ Before stating the main entropy bound, we discuss which subsets of
 $\C$ are compact in the $d_\C^s$ topology.
 
 \begin{remark}[Compactness in $(\C,d_\C^s)$]\label{rem:compactness}
-The full space $\C$ is \emph{not} compact in the $d_\C^s$ topology:
-it is unbounded (e.g., $d_\C^s(n,n^k)\to 1$ as $k\to\infty$).
-To obtain compact invariant sets, one must restrict attention.
-Two natural constructions are:
-\begin{enumerate}[label=\textup{(\roman*)}]
-  \item \emph{Finite orbit closures.}  If $K$ is a finite union
-    of orbits $\{\psi_\alpha^k(f_i):k\in\Z\}$, then any finite
-    subset of $K$ is trivially compact and $\psi_\alpha$-invariant.
-    This yields lower bounds on entropy for concrete function sets.
-  \item \emph{Bounded complexity bands.}  For $0<a\le b$, define
-    $K_{a,b}=\{f\in\C : a\le f(n)\le b \text{ for all }n\}$.
-    Then $K_{a,b}$ is $d_\C^s$-bounded (with diameter at most~$1$)
-    and closed.  However, $K_{a,b}$ is $\psi_\alpha$-invariant only
-    if $a=b=0$, which is excluded from~$\C$.  A modified band
-    $K_{a,b}^N=\{f\in\C : a\le f(n)\le b \text{ for }1\le n\le N\}$,
-    viewed as a subset of $\R^N$, is compact and can be used for
-    finite-dimensional entropy approximations.
-\end{enumerate}
-Proposition~\ref{prop:no-compact-invariant} below shows that any
-compact $\psi_\alpha$-invariant subset of $(\C,d_\C^s)$ is
-$d_\C^s$-trivial, so the entropy of $\psi_\alpha|_K$ is always~$0$
-for such~$K$.
+The full space $\C$ is not compact in the $d_\C^s$ topology: the
+sequence $(f_k)_{k\ge 1}$ with $f_k\equiv k$ lies in $\C$ but is
+$d_\C^s$-unbounded.  A natural candidate for a compact, $\psi_\alpha$-invariant
+subspace would be a ``complexity band'' $K_{a,b}=\{f\in\C : a\le f(n)
+\le b \text{ for all }n\}$ for some $0<a\le b$.  However,
+$\psi_\alpha(K_{a,b})=K_{\alpha a,\alpha b}\ne K_{a,b}$ for any
+$\alpha\ne 1$, so no such band is invariant.  The same obstruction
+applies to any finite union of $\psi_\alpha$-orbits: each orbit
+$\{\psi_\alpha^k(f):k\in\Z\}=\{\alpha^k f:k\in\Z\}$ is infinite and
+unbounded for $\alpha\ne 1$, hence not compact.
+Proposition~\ref{prop:no-compact-invariant} below makes this
+obstruction rigorous: every non-empty compact $\psi_\alpha$-invariant
+subset is $d_\C^s$-trivial, so the entropy of $\psi_\alpha|_K$ is
+always $0$ on such~$K$.
 \end{remark}
 
 \begin{proposition}[No non-trivial compact invariant sets]\label{prop:no-compact-invariant}
@@ -2228,10 +2223,14 @@ its conjugate $d_\C^t$, the symmetrization satisfies
 \]
 so $\psi_\alpha$ is a strict contraction on $(\C,d_\C^s)$ with
 Lipschitz constant $1/\alpha<1$.  If $K$ is non-empty, compact, and
-$\psi_\alpha$-invariant, then the diameter
-$\mathrm{diam}(K)=\sup_{f,g\in K}d_\C^s(f,g)$ satisfies
-$\mathrm{diam}(\psi_\alpha(K))=(1/\alpha)\mathrm{diam}(K)$.
-But $\psi_\alpha(K)=K$, so $\mathrm{diam}(K)=0$.
+$\psi_\alpha$-invariant, then $K$ is bounded in $(\C,d_\C^s)$
+(compact sets in a metric space have finite diameter), and the
+diameter $\mathrm{diam}(K)=\sup_{f,g\in K}d_\C^s(f,g)<\infty$
+satisfies $\mathrm{diam}(\psi_\alpha(K))=(1/\alpha)\mathrm{diam}(K)$.
+Since $\psi_\alpha(K)=K$, we obtain
+$\mathrm{diam}(K)=(1/\alpha)\mathrm{diam}(K)$ with
+$\mathrm{diam}(K)<\infty$ and $1/\alpha\ne 1$, forcing
+$\mathrm{diam}(K)=0$.
 \end{proof}
 
 \begin{remark}\label{rem:entropy-vacuous}
@@ -2269,22 +2268,6 @@ invariant sets are $d_\C^s$-trivial, i.e., $d_\C^s$-equivalence
 classes, which may be singletons only when the orbit is constant ---
 impossible for $\alpha\ne 1$ on distinct points.
 \end{example}
-
-\begin{proposition}[Finite invariant sets have zero entropy]\label{prop:entropy-upper}
-For the scaling map $\psi_\alpha$ on a finite
-$\psi_\alpha$-invariant set $K=\{f_1,\ldots,f_m\}\subset\C$, the
-topological entropy satisfies $h(\psi_\alpha|_K)=0$.
-\end{proposition}
-
-\begin{proof}
-A finite set is a special case of a compact invariant set.  By
-Proposition~\ref{prop:no-compact-invariant}, $d_\C^s(f,g)=0$ for
-all $f,g\in K$.  Thus $K$ is a single $d_\C^s$-equivalence class,
-the only $(n,\eps)$-spanning set is $E=K$ itself (with
-$r(n,\eps)=1$ for all $n,\eps>0$), and
-$h(\psi_\alpha|_K)=\lim_{n\to\infty}\frac{1}{n}\log 1=0$.
-\end{proof}
-
 
 \begin{remark}[Entropy on non-compact sets]\label{rem:entropy-gap}
 Proposition~\ref{prop:no-compact-invariant} shows that compact
@@ -2412,8 +2395,7 @@ complexity classes.
 
 \subsection*{Acknowledgements}
 
-% TODO: Fill in acknowledgements before submission
-The author thanks \textit{[acknowledgements to be added]}.
+The author thanks AIRINA Labs for institutional support.
 
 
 % ═══════════════════════════════════════════════════════════════
@@ -2445,7 +2427,7 @@ The author thanks \textit{[acknowledgements to be added]}.
   \textit{Handbook of the History of General Topology}, vol.~3,
   Kluwer Academic Publishers, 2001, pp.~853--968.
 
-\bibitem{olela2024} O.~Olela Otafudu, D.~P.~Matladi, M.~S.~Zweni,
+\bibitem{olela2024} O.~Olela-Otafudu, D.~P.~Matladi, M.~S.~Zweni,
   Expansive homeomorphisms on quasi-metric spaces, \textit{Appl.\
   Gen.\ Topol.}\ 25 (2024), 1--15.
 
