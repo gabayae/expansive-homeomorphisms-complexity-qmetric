@@ -469,48 +469,48 @@ distance to encode directional information.}
 \end{figure}
 
 
-\subsection{Overview of main results}
+\subsection{Main results}
 
-Here is a preview of the main results; the reader may want to come
-back to this summary while working through the technical sections.
+The paper establishes the following results about the dynamics of
+the scaling transformation $\psi_\alpha(f)(n)=\alpha f(n)$ on the
+complexity space $(\C,d_\C)$.
 
-The first result characterises exactly when the scaling
-transformation is expansive.
+\begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.4em]
+\item \emph{Expansiveness} (Theorem~\ref{thm:main-scaling}).
+  The map $\psi_\alpha$ is expansive on $(\C,d_\C)$ if and only if
+  $\alpha\ne 1$.
 
-\begin{keyresult}[Theorem~\ref{thm:main-scaling}: Expansiveness of scaling]
-The scaling map $\psi_\alpha(f)(n)=\alpha f(n)$ is expansive on the
-complexity space $(\C,d_\C)$ if and only if $\alpha\neq 1$.
-\end{keyresult}
+\item \emph{Stable and unstable sets}
+  (Theorems~\ref{thm:stable-sets} and~\ref{thm:unstable-sets}).
+  For $\alpha>1$, the $\delta$-stable set of $f$ under
+  $\psi_\alpha$ coincides with the closed $d_\C$-ball
+  $\{g:d_\C(f,g)\le\delta\}$; the $\delta$-unstable set admits the
+  symmetric description in terms of the conjugate
+  quasi-metric~$d_\C^t$.
 
-The second result gives the stable sets of this dynamics a clean
-complexity-theoretic interpretation.
+\item \emph{Exact contraction rate}
+  (Corollary~\ref{cor:exact-contraction}). For every $\alpha>0$ and
+  every $n\ge 0$,
+  \[
+    d_\C(\psi_\alpha^n(f),\psi_\alpha^n(g))
+    \;=\; \alpha^{-n}\,d_\C(f,g),
+  \]
+  with optimal multiplicative constant $C=1$.
 
-\begin{keyresult}[Theorem~\ref{thm:stable-sets}: Stable sets are complexity classes]
-For $\alpha>1$, the $\delta$-stable set of $f$ under $\psi_\alpha$
-coincides with the set $\{g: d_\C(f,g)\le\delta\}$, which contains
-all functions $g$ with $g(n)\ge f(n)$ for every~$n$.
-\end{keyresult}
+\item \emph{Hierarchy and orbit separation}
+  (Theorem~\ref{thm:hierarchy}). If $d_\C(g,f)>0$, the orbits of
+  $f$ and $g$ under $\psi_\alpha$ ($\alpha\ne 1$) are eventually
+  $d_\C^s$-separated.  The Hartmanis--Stearns
+  condition $f(n)\log f(n)=o(g(n))$ is one sufficient source of
+  such pairs.
 
-The third result is a precise form of hyperbolicity.
-
-\begin{keyresult}[Corollary~\ref{cor:exact-contraction}: Exact contraction rate]
-The scaling map $\psi_\alpha$ ($\alpha>0$) contracts distances
-exactly by factor $1/\alpha$ per forward iterate: the contraction
-rate is $\lambda=1/\alpha$ and the constant is $C=1$.
-\end{keyresult}
-
-The fourth result connects the dynamical picture to a classical
-theorem in complexity theory.
-
-\begin{keyresult}[Theorem~\ref{thm:hierarchy}: Hierarchy as orbit separation]
-If $f(n)\log f(n)=o(g(n))$, then the orbits of $f$ and $g$ under
-$\psi_\alpha$ separate in the symmetrized quasi-metric beyond every
-threshold.
-\end{keyresult}
-
-Each of these results is proved in detail, with an accompanying
-algorithm and a Python implementation; all code lives in the
-companion repository.
+\item \emph{A structural limit for topological entropy}
+  (Proposition~\ref{prop:no-compact-invariant}). For $\alpha\ne 1$,
+  every non-empty compact $\psi_\alpha$-invariant subset of
+  $(\C,d_\C^s)$ has $d_\C^s$-diameter zero.  Consequently, the
+  standard Bowen entropy of $\psi_\alpha$ on compact invariant
+  sets is vacuous in this setting.
+\end{enumerate}
 
 \subsection{Organisation}
 
