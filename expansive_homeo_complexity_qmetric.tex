@@ -686,25 +686,36 @@ algorithms live.
 
 \subsection{Definition and basic properties}
 
-Throughout, $\N=\{1,2,3,\dots\}$.  Let $\C$ denote the set of all
+Throughout, $\N=\{1,2,3,\dots\}$.  Following
+Schellekens~\cite{schellekens1995} and Romaguera and
+Schellekens~\cite{romaguera1999}, let $\C$ denote the set of all
 functions
 \[
-  f\colon\N\to[1,\infty)\quad\text{with}\quad
+  f\colon\N\to(0,\infty)\quad\text{with}\quad
   \sum_{n=1}^\infty 2^{-n}/f(n)<\infty.
 \]
 Each such function represents the running-time profile of an
-algorithm: $f(n)$ is the time required on inputs of size~$n$.
+algorithm: $f(n)$ is the time required on inputs of size~$n$.  The
+summability condition is the standing assumption of the framework:
+it ensures that the weighting function $w_\C(f)=\sum_{n\ge 1}
+2^{-n}/f(n)$ is finite, and hence that the quasi-metric defined
+below takes only finite values.
 
-\begin{remark}[Why $f(n)\ge 1$]\label{rem:lower-bound}
-The lower bound $f(n)\ge 1$ encodes the elementary fact that any
-computation on an input of size~$n$ takes at least one elementary
-step.  This is the standard convention in the Schellekens
-framework~\cite{schellekens1995,romaguera1999}: without it, the
-quasi-metric $d_\C$ is not bounded --- and in fact need not even take
-finite values --- on the larger class of strictly positive functions.
-The summability requirement
-$\sum 2^{-n}/f(n)<\infty$ is automatic when $f$ is bounded below
-by a positive constant, and ensures that $d_\C$ is everywhere finite.
+\begin{remark}[Subspaces are also complexity spaces]\label{rem:subspace-convention}
+Romaguera and Schellekens~\cite{romaguera1999} observe that any
+subspace of $(\C,d_\C)$ is again called a complexity space.  Two
+subspaces deserve special mention.  First, the
+\emph{Turing-machine-runtime subspace}
+$\C_{\ge 1}:=\{f\in\C: f(n)\ge 1 \text{ for all }n\}$ — for which
+the bound $d_\C(f,g)\le 1$ of Theorem~\ref{thm:dc-props}(iii) below
+holds uniformly — encodes the elementary fact that any computation
+on input of size~$n$ takes at least one step.  Second, the original
+formulation of~\cite{romaguera1999} permits the extended codomain
+$(0,+\infty]$ with the convention $1/(+\infty)=0$, which makes
+$\C$ a lattice under pointwise order; we work with the real-valued
+subspace for notational lightness and because all of our examples
+are real-valued.  Both restrictions are subspaces in the
+Romaguera--Schellekens sense and inherit every result we prove.
 \end{remark}
 
 \begin{definition}[Complexity quasi-metric~\cite{schellekens1995}]
@@ -729,7 +740,9 @@ The following hold:
 \begin{enumerate}[label=\textup{(\roman*)}]
   \item $d_\C$ is a quasi-metric on $\C$.
   \item $d_\C(f,g)=0$ if and only if $f(n)\le g(n)$ for all $n\in\N$.
-  \item $d_\C(f,g)\le 1$ for all $f,g\in\C$.
+  \item $d_\C(f,g)\le w_\C(g)=\sum_{n=1}^\infty 2^{-n}/g(n)$ for all
+    $f,g\in\C$.  In particular, if $g(n)\ge 1$ for all $n$ (i.e.,
+    $g\in\C_{\ge 1}$), then $d_\C(f,g)\le 1$.
 \end{enumerate}
 \end{theorem}
 
@@ -750,9 +763,11 @@ for all~$n$, so $f=g$.
 \textbf{(ii)}  $d_\C(f,g)=0$ iff each term is zero, iff
 $1/g(n)\le 1/f(n)$ for all~$n$, iff $f(n)\le g(n)$.
 
-\textbf{(iii)}  Each term $2^{-n}\max\left\{0,\,1/g(n)-1/f(n)\right\}\le
-2^{-n}\cdot 1/g(n)\le 2^{-n}$, so $d_\C(f,g)\le\sum_{n=1}^\infty
-2^{-n}=1$.
+\textbf{(iii)}  Each term satisfies
+$2^{-n}\max\left\{0,\,1/g(n)-1/f(n)\right\}\le 2^{-n}/g(n)$, so
+$d_\C(f,g)\le\sum_{n=1}^\infty 2^{-n}/g(n)=w_\C(g)$.  When
+$g(n)\ge 1$ for all $n$, this bound is in turn dominated by
+$\sum_{n=1}^\infty 2^{-n}=1$.
 \end{proof}
 
 Property~(ii) is the key asymmetry result: \emph{moving from a
@@ -895,18 +910,26 @@ The exact sums are verified symbolically in
 \href{\repourl/blob/main/code/sagemath/incomparable_functions.sage}{\texttt{incomparable\_functions.sage}}.
 \end{example}
 
-\begin{example}[The bound $d_\C\le 1$ is sharp]\label{ex:counter-bounded}
-The bound in Theorem~\ref{thm:dc-props}(iii) cannot be improved.  Take
-$g(n)=1$ for all $n$ and, for each $k\in\N$, the constant function
-$f_k(n)=k$.  Both lie in~$\C$.  Since $g\le f_k$ pointwise, we have
-$d_\C(g,f_k)=0$.  In the reverse direction,
+\begin{example}[The bound is sharp]\label{ex:counter-bounded}
+The bound in Theorem~\ref{thm:dc-props}(iii) is attained.  Take
+$f(n)=1/n$ and $g(n)=1$ for all $n$.  Both lie in~$\C$: the
+summability condition reads $\sum 2^{-n}/f(n)=\sum n\cdot 2^{-n}=2$
+for $f$, and $w_\C(g)=\sum 2^{-n}=1$ for $g$.  Since
+$f(n)\le g(n)$ for all $n\ge 1$, Theorem~\ref{thm:dc-props}(ii)
+gives $d_\C(f,g)=0$: $f$ is faster than $g$ pointwise, so moving
+from $f$ to $g$ is ``free.''  In the reverse direction the $n=1$ term vanishes
+($f(1)=1=g(1)$) and
 \[
-  d_\C(f_k,g)
-  \;=\;\sum_{n=1}^\infty 2^{-n}\,\Bigl(1-\tfrac{1}{k}\Bigr)
-  \;=\; 1-\tfrac{1}{k},
+  d_\C(g,f)
+  \;=\; \sum_{n=2}^\infty 2^{-n}\,\Bigl(\tfrac{1}{f(n)}-\tfrac{1}{g(n)}\Bigr)
+  \;=\; \sum_{n=2}^\infty 2^{-n}(n-1)
+  \;=\; \tfrac{1}{2}\sum_{m=1}^\infty m\cdot 2^{-m}
+  \;=\; 1.
 \]
-which approaches $1$ as $k\to\infty$.  Thus $\sup_{f,g\in\C}d_\C(f,g)=1$,
-but the value $1$ itself is not attained on $\C$.
+This saturates the bound $d_\C(g,f)\le w_\C(g)=1$ on the subspace
+$\C_{\ge 1}$, and witnesses the asymmetry: the cost of swapping a
+faster function for a slower one is bounded by the weight of the
+target, with equality possible.
 \end{example}
 
 \subsection{The conjugate and symmetrized complexity distances}
