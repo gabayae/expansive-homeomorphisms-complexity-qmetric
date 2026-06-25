@@ -244,12 +244,13 @@ complexity space $(\C,d_\C)$ if and only if $\alpha\neq 1$.
 The $\delta$-stable sets of this dynamics turn out to coincide
 with asymptotic complexity classes, giving a dynamical
 characterisation of objects familiar from complexity theory.
-We then show that the canonical coordinates of $\psi_\alpha$ are
-hyperbolic with contraction rate $\lambda=1/\alpha$, and we
-connect orbit separation in the dynamical system to the classical
-time hierarchy theorem of Hartmanis and Stearns.  Unstable sets,
-conjugate dynamics, and topological entropy estimates for the
-scaling map are also worked out.  Concrete algorithms and Python
+We then show that $\psi_\alpha$ contracts $d_\C^s$-distances
+exactly by factor $1/\alpha$ per iterate, and we connect orbit
+separation to the classical time hierarchy theorem of Hartmanis
+and Stearns.  Unstable sets, conjugate dynamics, and a
+no-compact-invariant-set theorem (showing that the standard
+Bowen entropy is trivially zero on compact invariant sets) are
+also worked out.  Concrete algorithms and Python
 implementations accompany every proof, so each result can be
 checked computationally; SageMath snippets sit alongside the
 examples, and the full code is in the
@@ -314,7 +315,7 @@ insight.
 This asymmetry is what a \emph{quasi-metric} captures: a distance
 function $q$ where $q(x,y)$ need not equal $q(y,x)$.  Schellekens~\cite{schellekens1995} introduced the
 \emph{complexity quasi-metric} $d_\C$ on the space of functions
-$f\colon\N\to(0,\infty)$ and showed that its topological properties
+$f\colon\N\to[1,\infty)$ and showed that its topological properties
 encode fundamental features of computational complexity.  Romaguera
 and Schellekens~\cite{romaguera1999} subsequently developed the
 quasi-metric structure of complexity spaces in depth.
@@ -492,9 +493,10 @@ all functions $g$ with $g(n)\ge f(n)$ for every~$n$.
 
 The third result is a precise form of hyperbolicity.
 
-\begin{keyresult}[Theorem~\ref{thm:hyperbolicity}: Hyperbolic canonical coordinates]
-The canonical coordinates of $\psi_\alpha$ ($\alpha>1$) exhibit
-exponential contraction with rate $\lambda=1/\alpha$ and constant $C=1$.
+\begin{keyresult}[Corollary~\ref{cor:exact-contraction}: Exact contraction rate]
+The scaling map $\psi_\alpha$ ($\alpha>0$) contracts distances
+exactly by factor $1/\alpha$ per forward iterate: the contraction
+rate is $\lambda=1/\alpha$ and the constant is $C=1$.
 \end{keyresult}
 
 The fourth result connects the dynamical picture to a classical
@@ -683,10 +685,26 @@ algorithms live.
 
 \subsection{Definition and basic properties}
 
-Let $\C$ denote the set of all functions
-$f\colon\N\to(0,\infty)$.  Each such function represents the
-running-time profile of an algorithm: $f(n)$ is the time required
-on inputs of size~$n$.
+Throughout, $\N=\{1,2,3,\dots\}$.  Let $\C$ denote the set of all
+functions
+\[
+  f\colon\N\to[1,\infty)\quad\text{with}\quad
+  \sum_{n=1}^\infty 2^{-n}/f(n)<\infty.
+\]
+Each such function represents the running-time profile of an
+algorithm: $f(n)$ is the time required on inputs of size~$n$.
+
+\begin{remark}[Why $f(n)\ge 1$]\label{rem:lower-bound}
+The lower bound $f(n)\ge 1$ encodes the elementary fact that any
+computation on an input of size~$n$ takes at least one elementary
+step.  This is the standard convention in the Schellekens
+framework~\cite{schellekens1995,romaguera1999}: without it, the
+quasi-metric $d_\C$ is not bounded --- and in fact need not even take
+finite values --- on the larger class of strictly positive functions.
+The summability requirement
+$\sum 2^{-n}/f(n)<\infty$ is automatic when $f$ is bounded below
+by a positive constant, and ensures that $d_\C$ is everywhere finite.
+\end{remark}
 
 \begin{definition}[Complexity quasi-metric~\cite{schellekens1995}]
 \label{def:dc}
@@ -876,14 +894,18 @@ The exact sums are verified symbolically in
 \href{\repourl/blob/main/code/sagemath/incomparable_functions.sage}{\texttt{incomparable\_functions.sage}}.
 \end{example}
 
-\begin{example}[Counterexample: unbounded reciprocal difference]\label{ex:counter-bounded}
-Let $f(n)=1/n$ (efficiency improves with $n$) and $g(n)=1$.  Then
-$1/g(n)-1/f(n)=1-n$, which is negative for $n\ge 2$, so only
-the $n=1$ term contributes: $d_\C(f,g)=2^{-1}\max\{0,1-1\}=0$.
-In the reverse direction, $1/f(n)-1/g(n)=n-1$, so
-$d_\C(g,f)=\sum_{n=2}^\infty 2^{-n}(n-1)=1$.  This example
-saturates the upper bound of Theorem~\ref{thm:dc-props}(iii),
-showing that $d_\C(f,g)\le 1$ is tight.
+\begin{example}[The bound $d_\C\le 1$ is sharp]\label{ex:counter-bounded}
+The bound in Theorem~\ref{thm:dc-props}(iii) cannot be improved.  Take
+$g(n)=1$ for all $n$ and, for each $k\in\N$, the constant function
+$f_k(n)=k$.  Both lie in~$\C$.  Since $g\le f_k$ pointwise, we have
+$d_\C(g,f_k)=0$.  In the reverse direction,
+\[
+  d_\C(f_k,g)
+  \;=\;\sum_{n=1}^\infty 2^{-n}\,\Bigl(1-\tfrac{1}{k}\Bigr)
+  \;=\; 1-\tfrac{1}{k},
+\]
+which approaches $1$ as $k\to\infty$.  Thus $\sup_{f,g\in\C}d_\C(f,g)=1$,
+but the value $1$ itself is not attained on $\C$.
 \end{example}
 
 \subsection{The conjugate and symmetrized complexity distances}
@@ -978,13 +1000,19 @@ Olela Otafudu et al.~\cite{olela2024} extended this to
 quasi-metric spaces, where the asymmetry of the distance introduces
 new subtleties.
 
-\begin{definition}[Expansive homeomorphism~\cite{olela2024}]
+\begin{definition}[$q$-expansive homeomorphism~{\cite{olela2024}}]
 \label{def:expansive}
-Let $(X,q)$ be a quasi-metric space and let $\psi\colon X\to X$ be a
-homeomorphism (with respect to the topology $\tau_{q^s}$ induced by
-the symmetrization).  We say $\psi$ is \emph{$q$-expansive} if there
-exists $\delta>0$ such that for all $x\neq y$, there exists $n\in\Z$
-with $q(\psi^n(x),\psi^n(y))>\delta$.
+Let $(X,q)$ be a $T_0$ quasi-metric space and let
+$\psi\colon X\to X$ be a homeomorphism with respect to the
+metric topology $\tau_{q^s}$ generated by the symmetrization
+$q^s=\max\{q,q^t\}$.  We say that $\psi$ is \emph{$q$-expansive} if
+there exists a constant $\delta>0$ (an \emph{expansive constant})
+such that for every pair of distinct points $x\ne y$ in $X$, there
+exists $n\in\Z$ with
+\[
+  \max\{\,q(\psi^n(x),\psi^n(y)),\;q(\psi^n(y),\psi^n(x))\,\}
+  \;>\;\delta.
+\]
 \end{definition}
 
 Note that we allow both positive and negative iterates: the
@@ -1066,23 +1094,17 @@ So $\psi_2$ is also $d_\C^t$-expansive, confirming part~(i) of
 Theorem~\ref{thm:olela-equiv}.
 \end{example}
 
-\begin{example}[Non-expansive homeomorphism: translation]
-\label{ex:non-exp-translation}
-Define the \emph{additive translation} $\phi_c(f)(n)=f(n)+c$ for a
-fixed constant $c>0$.  Since $\phi_c^k(f)(n)=f(n)+kc$, we compute:
-\[
-  d_\C(\phi_c^k(f),\phi_c^k(g))
-  = \sum_{n=1}^\infty 2^{-n}
-    \max\!\left\{0,\frac{1}{g(n)+kc}-\frac{1}{f(n)+kc}\right\}.
-\]
-For large $|k|$, the terms $1/(f(n)+kc)$ and $1/(g(n)+kc)$ both
-tend to zero (if $k\to+\infty$) or become undefined (if $kc$ is
-large and negative).  In particular, for $k\to+\infty$,
-$d_\C(\phi_c^k(f),\phi_c^k(g))\to 0$ for \emph{all} pairs $f,g$.
-Since there is no $\delta>0$ that is eventually exceeded, $\phi_c$
-is \emph{not} expansive.  Unlike the scaling map, additive
-translation does not preserve the multiplicative structure needed
-for expansiveness on~$(\C,d_\C)$.
+\begin{example}[The identity is not expansive]\label{ex:non-expansive}
+The identity map $\mathrm{id}\colon\C\to\C$ is trivially a
+$\tau_{d_\C^s}$-homeomorphism.  For any $\delta>0$, choose
+$f,g\in\C$ with $0<d_\C^s(f,g)<\delta$ (for example, two distinct
+constant functions $f\equiv k_1$, $g\equiv k_2$ with $|k_1-k_2|$
+small).  Every iterate of $\mathrm{id}$ leaves the distance
+unchanged, so $d_\C^s(\mathrm{id}^n(f),\mathrm{id}^n(g))<\delta$
+for all $n\in\Z$.  Hence $\mathrm{id}$ is not expansive.  This
+example shows that the conclusion of
+Theorem~\ref{thm:main-scaling} can fail even for
+$\tau_{d_\C^s}$-homeomorphisms when $\alpha=1$.
 \end{example}
 
 \subsection{Checking expansiveness numerically}
@@ -1217,6 +1239,24 @@ roles reverse.
 The main result says that the scaling map is expansive exactly
 when it is non-trivial.
 
+\begin{lemma}[$\psi_\alpha$ is a homeomorphism]\label{lem:psi-homeo}
+For every $\alpha>0$, the map $\psi_\alpha\colon\C\to\C$ is a
+bijection with inverse $\psi_{1/\alpha}$, and both $\psi_\alpha$
+and $\psi_{1/\alpha}$ are Lipschitz with respect to $d_\C^s$.  In
+particular, $\psi_\alpha$ is a $\tau_{d_\C^s}$-homeomorphism.
+\end{lemma}
+
+\begin{proof}
+The inverse identity $\psi_\alpha\circ\psi_{1/\alpha}=\mathrm{id}$
+is immediate.  By Lemma~\ref{lem:scaling-lip} applied to both
+$d_\C$ and $d_\C^t$,
+$d_\C^s(\psi_\alpha(f),\psi_\alpha(g))=(1/\alpha)d_\C^s(f,g)$,
+giving the Lipschitz bound with constant $1/\alpha$; the same
+applies to $\psi_{1/\alpha}$ with constant $\alpha$.  Both maps are
+therefore $\tau_{d_\C^s}$-continuous, and $\psi_\alpha$ is a
+homeomorphism.
+\end{proof}
+
 \begin{theorem}[Main theorem]\label{thm:main-scaling}
 The scaling transformation $\psi_\alpha$ is expansive on $(\C,d_\C)$
 if and only if $\alpha\neq 1$.
@@ -1232,28 +1272,37 @@ proposed~$\delta$; if $d_\C(f,g)=0$ but $d_\C(g,f)>0$ (i.e., $f$ is
 faster than~$g$), then $d_\C(\psi_1^n(f),\psi_1^n(g))=0$ for all~$n$
 and no separation occurs.  Hence $\psi_1$ is not expansive.
 
-\textbf{Case 2: $\alpha>1$.}  Let $f\neq g$.  By $T_0$~separation,
-at least one of $d_\C(f,g)$ or $d_\C(g,f)$ is positive.  Suppose
-$d_\C(f,g)>0$.  Then for negative iterates:
-\[
-  d_\C(\psi_\alpha^{-k}(f),\psi_\alpha^{-k}(g))
-  \;=\; \alpha^k\,d_\C(f,g)
-  \;\xrightarrow{k\to\infty}\;\infty.
-\]
-In particular, for any $\delta>0$ there exists $k$ with
-$d_\C(\psi_\alpha^{-k}(f),\psi_\alpha^{-k}(g))>\delta$.
+\textbf{Case 2: $\alpha>1$.}  Take any $\delta\in(0,1)$.  Let
+$f\ne g$ in $\C$.  Since $(\C,d_\C^s)$ is a $T_0$ quasi-metric
+space, at least one of $d_\C(f,g)$ or $d_\C(g,f)$ is positive.
 
-If instead $d_\C(f,g)=0$ but $d_\C(g,f)>0$, then by
-Theorem~\ref{thm:olela-equiv}(i), $\psi_\alpha$ is also
-$d_\C^t$-expansive, and we apply the same argument with $d_\C^t$.
+If $d_\C(f,g)>0$, apply Corollary~\ref{cor:backward-expansion} with
+the pair $(f,g)$: for some $k\ge 0$,
+$d_\C(\psi_\alpha^{-k}(f),\psi_\alpha^{-k}(g))=\alpha^k d_\C(f,g)>\delta$,
+and Definition~\ref{def:expansive} is satisfied with $n=-k$.
 
-\textbf{Case 3: $0<\alpha<1$.}  Now forward iterates expand:
-\[
-  d_\C(\psi_\alpha^k(f),\psi_\alpha^k(g))
-  \;=\;\alpha^{-k}\,d_\C(f,g)
-  \;\xrightarrow{k\to\infty}\;\infty.
-\]
-The argument is otherwise identical.
+If instead $d_\C(f,g)=0$ but $d_\C(g,f)>0$, apply the same corollary
+to the pair $(g,f)$: for some $k\ge 0$,
+$d_\C(\psi_\alpha^{-k}(g),\psi_\alpha^{-k}(f))=\alpha^k d_\C(g,f)>\delta$.
+Since $d_\C(\psi_\alpha^{-k}(g),\psi_\alpha^{-k}(f))
+=d_\C^t(\psi_\alpha^{-k}(f),\psi_\alpha^{-k}(g))$, the symmetric
+condition in Definition~\ref{def:expansive} (with $q=d_\C$, $n=-k$)
+is satisfied.
+
+\textbf{Case 3: $0<\alpha<1$.}  Take any $\delta\in(0,1)$.  Let
+$f\ne g$ in $\C$.  At least one of $d_\C(f,g)$ or $d_\C(g,f)$ is
+positive.
+
+If $d_\C(f,g)>0$, then for forward iterates:
+$d_\C(\psi_\alpha^k(f),\psi_\alpha^k(g))=\alpha^{-k}d_\C(f,g)>\delta$
+for $k$ large enough.  Definition~\ref{def:expansive} is satisfied
+with $n=k$.
+
+If instead $d_\C(f,g)=0$ but $d_\C(g,f)>0$, apply the same argument
+to the pair $(g,f)$: $d_\C(\psi_\alpha^k(g),\psi_\alpha^k(f))
+=\alpha^{-k}d_\C(g,f)>\delta$ for $k$ large, and the symmetric
+condition in Definition~\ref{def:expansive} is satisfied with
+$n=k$.
 \end{proof}
 
 \begin{example}[Expansiveness for $\alpha=2$]\label{ex:expansive-alpha2}
@@ -1786,26 +1835,30 @@ $C=1$, not just an exponential bound.
 
 \subsection{Statement and proof}
 
-\begin{theorem}[Hyperbolicity]\label{thm:hyperbolicity}
-Let $\alpha>1$.  The scaling transformation $\psi_\alpha$ on
-$(\C,d_\C)$ has hyperbolic canonical coordinates with contraction
-rate $\lambda=1/\alpha$ and constant $C=1$: for all $f,g\in\C$
-and all $n\ge 0$,
+\begin{corollary}[Exact contraction rate]\label{cor:exact-contraction}
+For every $\alpha>0$ and every $f,g\in\C$,
 \[
-  d_\C(\psi_\alpha^n(f),\psi_\alpha^n(g))
-  \;=\; \Bigl(\frac{1}{\alpha}\Bigr)^{\!n}\,d_\C(f,g).
+  d_\C(\psi_\alpha^n(f),\psi_\alpha^n(g))\;=\;\alpha^{-n}\,d_\C(f,g)
+  \qquad\text{for all } n\ge 0.
 \]
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
-This follows immediately from Lemma~\ref{lem:scaling-lip} by
-induction:
-\[
-  d_\C(\psi_\alpha^n(f),\psi_\alpha^n(g))
-  =\alpha^{-1}\,d_\C(\psi_\alpha^{n-1}(f),\psi_\alpha^{n-1}(g))
-  =\cdots=\alpha^{-n}\,d_\C(f,g).  \qedhere
-\]
+Induction on $n$, using Lemma~\ref{lem:scaling-lip} at each step.
 \end{proof}
+
+\begin{remark}[On the term ``hyperbolicity'']\label{rem:hyperbolicity}
+Corollary~\ref{cor:exact-contraction} gives an \emph{exact}
+contraction rate, not merely an exponential bound; in particular,
+the constant in front of the exponential is~$1$.  The terminology
+``hyperbolic'' is often used in this kind of one-sided contraction
+setting (e.g., Reddy~\cite{reddy1983}), but it should be emphasized
+that we do \emph{not} construct a stable/unstable splitting with a
+local product structure in the sense of classical hyperbolic
+dynamics: the dynamics here is conformal across all of~$\C$.  What
+we obtain is the explicit algebraic form of the contraction, which
+the abstract theory only delivers as an exponential bound.
+\end{remark}
 
 \begin{example}[Hyperbolic contraction for $\alpha=2$]\label{ex:hyperbolic-alpha2}
 Take $f(n)=n^3$, $g(n)=n^2$, $\alpha=2$.  Since $f(n)\ge g(n)$
@@ -1869,7 +1922,7 @@ with ratio $1/\alpha$.}
 
 
 \begin{remark}[Sharpness]
-The constant $C=1$ in Theorem~\ref{thm:hyperbolicity} is optimal:
+The constant $C=1$ in Corollary~\ref{cor:exact-contraction} is optimal:
 the decay is \emph{exactly} geometric, not merely bounded by a
 geometric sequence.  This is a consequence of the exact scaling
 property of Lemma~\ref{lem:scaling-lip}.
@@ -1920,22 +1973,20 @@ $d:=d_\C(f,g)\approx 0.111$.  The backward orbit distances are:
 \begin{center}
 \begin{tabular}{ccc}
 \hline
-$n$ & $d_\C(\psi_3^{-n}(f),\psi_3^{-n}(g))$ & Value \\\hline
-$0$ & $d$ & $0.111$ \\
-$1$ & $3d$ & $0.333$ \\
-$2$ & $9d$ & $0.999$ \\
-$3$ & $27d$ & $1.000$ (capped)\\
+$k$ & $d_\C(\psi_3^{-k}(f),\psi_3^{-k}(g))$ & Value \\\hline
+$0$ & $d$    & $0.111$ \\
+$1$ & $3d$   & $0.333$ \\
+$2$ & $9d$   & $0.999$ \\
+$3$ & $27d$  & $2.997$ \\
+$4$ & $81d$  & $8.991$ \\
+$5$ & $243d$ & $26.97$ \\
 \hline
 \end{tabular}
 \end{center}
-The theoretical values $\alpha^n d = 3^n \cdot 0.111$ are
-$0.111, 0.333, 0.999, 2.997, \ldots$, but since
-$d_\C(f,g)\le 1$ (Theorem~\ref{thm:dc-props}(iii)), the actual
-computed distances are capped at~$1$.  The theoretical formula
-$\alpha^n d_\C(f,g)$ holds exactly but yields values exceeding
-the quasi-metric's range---this is consistent because the
-Lipschitz formula was derived before applying the max-with-zero
-truncation to each term.
+The values grow unboundedly: this is the dynamical signature of
+backward expansion, and matches the Lipschitz identity of
+Lemma~\ref{lem:scaling-lip} (or its iteration in
+Corollary~\ref{cor:backward-expansion}) exactly.
 See
 \href{\repourl/blob/main/code/sagemath/hyperbolic_contraction.sage}{\texttt{hyperbolic\_contraction.sage}}
 for the full computation.
@@ -1971,55 +2022,46 @@ hierarchy gap shows up as orbit separation under the scaling
 transformation.
 
 \begin{theorem}[Hierarchy as orbit separation]\label{thm:hierarchy}
-Let $f,g\colon\N\to(0,\infty)$ satisfy $f(n)\log f(n)=o(g(n))$.
-Then for any $\alpha>1$ and any $\delta>0$, there exists $n\in\Z$
-such that
-\[
-  d_\C^s(\psi_\alpha^n(f),\psi_\alpha^n(g)) \;>\; \delta.
-\]
+Let $f,g\in\C$ with $d_\C(g,f)>0$ (informally, $g$ is not pointwise
+at least as fast as $f$).  Then for every $\alpha>0$ with
+$\alpha\ne 1$, the orbits $\{\psi_\alpha^n(f)\}_{n\in\Z}$ and
+$\{\psi_\alpha^n(g)\}_{n\in\Z}$ are eventually separated in
+$d_\C^s$: for every $\delta>0$ there exists $N\in\Z$ with
+$d_\C^s(\psi_\alpha^N(f),\psi_\alpha^N(g))>\delta$.
+
+In particular, the standard time-hierarchy condition
+$f(n)\log f(n)=o(g(n))$~\cite{hartmanis1965} is a sufficient
+(but, as Remark~\ref{rem:hierarchy} explains, not necessary)
+condition for $d_\C(g,f)>0$, and hence for orbit separation.
 \end{theorem}
 
 \begin{proof}
-The condition $f(n)\log f(n)=o(g(n))$ implies that $f$ and $g$ are
-not asymptotically equivalent: for large~$n$, $g(n)$ dominates
-$f(n)\log f(n)$ and hence $f(n)$ itself.  This means that
-$d_\C(g,f)>0$ (since $g$ is slower than~$f$ for large~$n$, the
-reciprocal $1/f(n)$ exceeds $1/g(n)$).
-
-Now, by the argument in Theorem~\ref{thm:main-scaling} (Case~2),
-the backward iterates give
+By hypothesis $d_\C(g,f)>0$.  For $\alpha>1$, the backward iterates give
 \[
   d_\C(\psi_\alpha^{-k}(g),\psi_\alpha^{-k}(f))
   = \alpha^k\,d_\C(g,f) \;\to\;\infty.
 \]
-Since $d_\C^s\ge d_\C$, we obtain
+Since $d_\C^s\ge d_\C$, we have
 $d_\C^s(\psi_\alpha^{-k}(f),\psi_\alpha^{-k}(g))>\delta$ for
-$k$ sufficiently large.
+$k$ large enough; set $N=-k$.  For $0<\alpha<1$, the forward iterates give
+\[
+  d_\C(\psi_\alpha^k(g),\psi_\alpha^k(f))
+  = \alpha^{-k}\,d_\C(g,f) \;\to\;\infty,
+\]
+and we set $N=k$.
+
+The claim about $f(n)\log f(n)=o(g(n))$ being sufficient: that
+condition implies $g(n)$ dominates $f(n)$ for large~$n$, so
+$1/f(n)>1/g(n)$ eventually and $d_\C(g,f)>0$ follows.
 \end{proof}
 
-\begin{remark}[Sharpening the hypothesis]\label{rem:hierarchy-sharp}
-Inspecting the proof reveals that only one property of $f$ and $g$
-is actually used by the dynamical argument: that $d_\C(g,f)>0$,
-i.e., that $g$ is not pointwise at most as fast as~$f$.  The
-orbit-separation machinery of Theorem~\ref{thm:main-scaling}
-then produces separation for \emph{any} such pair.
-
-The hypothesis $f(n)\log f(n)=o(g(n))$ is therefore stronger than
-what the dynamical proof requires.  Its role is
-\emph{complexity-theoretic}: it is precisely the condition under
-which the time hierarchy theorem guarantees
-$\mathrm{DTIME}(f(n))\subsetneq\mathrm{DTIME}(g(n))$.  In other
-words, the hierarchy gap ensures that $f$ and $g$ represent
-\emph{genuinely different} complexity classes, not merely different
-functions.
-
-Conversely, if we only assume $d_\C(g,f)>0$ (i.e., $g(n)>f(n)$ for
-some~$n$), we still obtain dynamical orbit separation, but lose the
-complexity-theoretic interpretation: the functions $f$ and $g$ may
-define the same complexity class despite their pointwise difference.
-The interplay between these two levels of separation---dynamical
-($d_\C>0$) versus complexity-theoretic ($f\log f=o(g)$)---is a
-distinctive feature of the quasi-metric approach.
+\begin{remark}\label{rem:hierarchy}
+The dynamical orbit-separation criterion is strictly finer than the
+Hartmanis--Stearns time-hierarchy criterion: any pair of functions
+with $d_\C(g,f)>0$ produces orbit separation, regardless of whether
+they are separated by a time-hierarchy gap.  Whether a quantitative
+orbit-separation rate corresponds in any nontrivial way to a
+hierarchy-style separation in $\mathrm{DTIME}$ is an open problem.
 \end{remark}
 
 \begin{example}[Linear vs.\ $n\log^2 n$]\label{ex:hier-nlogn}
@@ -2090,10 +2132,15 @@ eventually exceed any threshold~$\delta$.}
 Topological entropy is the standard invariant for measuring the
 ``complexity of the dynamics''---the rate at which information
 about initial conditions is needed to predict the future.  For
-expansive homeomorphisms, it is always positive~\cite{bowen1975}.
+expansive homeomorphisms on compact spaces, it is always
+positive~\cite{bowen1975}.
 
-This section gives an entropy estimate for $\psi_\alpha$ on
-suitable subsets of the complexity space.
+This section shows that the standard compact-set entropy
+machinery yields only trivial information for $\psi_\alpha$:
+every compact $\psi_\alpha$-invariant subset of $(\C,d_\C^s)$
+is $d_\C^s$-trivial (Proposition~\ref{prop:no-compact-invariant}).
+The question of a non-trivial entropy for the full non-compact
+dynamics is left open.
 
 \subsection{Setup and definition}
 
@@ -2135,148 +2182,96 @@ Two natural constructions are:
     viewed as a subset of $\R^N$, is compact and can be used for
     finite-dimensional entropy approximations.
 \end{enumerate}
-In practice, the lower bound of
-Proposition~\ref{prop:entropy-bound} below is most useful when $K$
-is a finite set of explicitly chosen functions.
+Proposition~\ref{prop:no-compact-invariant} below shows that any
+compact $\psi_\alpha$-invariant subset of $(\C,d_\C^s)$ is
+$d_\C^s$-trivial, so the entropy of $\psi_\alpha|_K$ is always~$0$
+for such~$K$.
 \end{remark}
 
-\begin{proposition}\label{prop:entropy-bound}
-Let $K\subset\C$ be a $\psi_\alpha$-invariant compact subset (in
-the $d_\C^s$ topology) containing at least two points $f,g$ with
-$d_\C^s(f,g)>0$.  Then for the scaling map $\psi_\alpha$
-($\alpha>1$), the topological entropy satisfies
-$h(\psi_\alpha|_K)\ge\log\alpha$.
+\begin{proposition}[No non-trivial compact invariant sets]\label{prop:no-compact-invariant}
+For every $\alpha>0$ with $\alpha\ne 1$, every non-empty compact
+$\psi_\alpha$-invariant subset $K\subseteq(\C,d_\C^s)$ consists of
+$d_\C^s$-equivalent points only: $d_\C^s(f,g)=0$ for all $f,g\in K$.
 \end{proposition}
 
 \begin{proof}
-Let $D:=\mathrm{diam}_{d_\C^s}(K)>0$ and fix $\eps>0$ with
-$\eps<D$.  We bound the spanning number $r(n,\eps)$ from below.
-
-\textbf{Step~1: distance expansion under $\psi_\alpha^{-1}$.}
-By Lemma~\ref{lem:scaling-lip} and its conjugate analogue,
-$d_\C^s(\psi_\alpha^{-1}(h_1),\psi_\alpha^{-1}(h_2))
-=\alpha\,d_\C^s(h_1,h_2)$ for all $h_1,h_2\in\C$.
-By induction, $d_\C^s(\psi_\alpha^{-j}(h_1),\psi_\alpha^{-j}(h_2))
-=\alpha^j\,d_\C^s(h_1,h_2)$.
-
-\textbf{Step~2: lower bound on $r(n,\eps)$.}
-Let $E\subset K$ be an $(n,\eps)$-spanning set.
-For each $f\in K$ there exists $g\in E$ with
-$d_\C^s(\psi_\alpha^j(f),\psi_\alpha^j(g))<\eps$ for
-$0\le j<n$.  In particular, at $j=0$ we have
-$d_\C^s(f,g)<\eps$, so $E$ is an $\eps$-net for $K$.
-
-Now consider the action of $\psi_\alpha^{-(n-1)}$ on $K$.
-Since $\psi_\alpha^{-(n-1)}$ expands $d_\C^s$-distances by
-$\alpha^{n-1}$, the image $\psi_\alpha^{-(n-1)}(K)$ has diameter
-$\alpha^{n-1}D$.  The spanning condition at $j=n-1$ requires that
-the $\eps$-balls around $\psi_\alpha^{-(n-1)}(E)$ (in the
-original metric) cover $\psi_\alpha^{-(n-1)}(K)$; equivalently,
-the $\alpha^{n-1}\eps$-balls around~$E$ must cover a set of
-diameter $\alpha^{n-1}D$ when pulled back.  A volume comparison
-gives $|E|\ge D/\eps$, but more precisely, for spanning sets of
-the \emph{iterated} metric
-$d_n(f,g):=\max_{0\le j<n}d_\C^s(\psi_\alpha^j(f),\psi_\alpha^j(g))$,
-we note that $d_n(f,g)\ge d_\C^s(\psi_\alpha^{-(n-1)}(f),
-\psi_\alpha^{-(n-1)}(g))=\alpha^{n-1}\,d_\C^s(f,g)$.
-Hence, if $d_\C^s(f,g)>\eps/\alpha^{n-1}$, then $d_n(f,g)>\eps$
-and $f,g$ cannot share the same representative in~$E$.
-This means each $\eps$-ball in the $d_n$-metric has
-$d_\C^s$-diameter at most $\eps/\alpha^{n-1}$.
-
-Choose $f_0,g_0\in K$ with $d_\C^s(f_0,g_0)=D$.  By
-the triangle inequality, any $\eps$-spanning set for $d_n$ must
-have cardinality at least
+Suppose $\alpha>1$ (the case $\alpha<1$ is symmetric, replacing
+$\psi_\alpha$ by $\psi_\alpha^{-1}=\psi_{1/\alpha}$).  By
+Corollary~\ref{cor:exact-contraction} applied to both $d_\C$ and
+its conjugate $d_\C^t$, the symmetrization satisfies
 \[
-  r(n,\eps) \;\ge\; \frac{D\,\alpha^{n-1}}{\eps}
-  \;=\; \frac{D}{\alpha\eps}\,\alpha^n.
+  d_\C^s(\psi_\alpha(f),\psi_\alpha(g))
+  \;=\;\tfrac{1}{\alpha}\,d_\C^s(f,g),
 \]
-
-\textbf{Step~3: entropy.}
-Taking logarithms,
-\[
-  \frac{1}{n}\log r(n,\eps)
-  \;\ge\; \frac{1}{n}\log\!\Bigl(\frac{D}{\alpha\eps}\Bigr)
-    + \log\alpha.
-\]
-As $n\to\infty$ the first term vanishes, giving
-$\limsup_{n\to\infty}\frac{1}{n}\log r(n,\eps)\ge\log\alpha$.
-Since this holds for every $0<\eps<D$, taking $\eps\to 0$
-yields $h(\psi_\alpha|_K)\ge\log\alpha$.
+so $\psi_\alpha$ is a strict contraction on $(\C,d_\C^s)$ with
+Lipschitz constant $1/\alpha<1$.  If $K$ is non-empty, compact, and
+$\psi_\alpha$-invariant, then the diameter
+$\mathrm{diam}(K)=\sup_{f,g\in K}d_\C^s(f,g)$ satisfies
+$\mathrm{diam}(\psi_\alpha(K))=(1/\alpha)\mathrm{diam}(K)$.
+But $\psi_\alpha(K)=K$, so $\mathrm{diam}(K)=0$.
 \end{proof}
 
-\begin{example}[Entropy bound for $\alpha=2$]\label{ex:entropy-alpha2}
-For $\alpha=2$, Proposition~\ref{prop:entropy-bound} gives
-$h(\psi_2|_K)\ge\log 2\approx 0.693$.  This means the dynamical
-complexity of the scaling-by-$2$ map grows at least as fast as a
-full $2$-shift.  In information-theoretic terms, at least $\log 2$
-bits per iterate are needed to track orbits.  If $\alpha=10$,
-the bound becomes $h\ge\log 10\approx 2.303$: faster scaling
-creates more dynamical complexity.
+\begin{remark}\label{rem:entropy-vacuous}
+Proposition~\ref{prop:no-compact-invariant} shows that the standard
+topological-entropy machinery (Bowen spanning sets on a compact
+invariant set) cannot detect any non-trivial dynamics of
+$\psi_\alpha$ on $(\C,d_\C^s)$ directly: the only candidate compact
+invariant sets are $d_\C^s$-trivial.  This is a consequence of the
+non-compactness of $\C$ in $\tau_{d_\C^s}$, and a known limitation
+of the topological-entropy framework on non-compact spaces.
+Alternative invariants suited to non-compact phase spaces (e.g.,
+the volume-growth entropy of~\cite{walters1982}, or asymmetric
+analogues) lie outside the scope of this paper and are an open
+direction.
+\end{remark}
+
+\begin{example}[Compact invariant sets are trivial for $\alpha=2$]\label{ex:entropy-alpha2}
+For $\alpha=2$, Proposition~\ref{prop:no-compact-invariant} shows
+that any compact $\psi_2$-invariant $K\subseteq(\C,d_\C^s)$
+satisfies $d_\C^s(f,g)=0$ for all $f,g\in K$.  In particular,
+every two-point set $\{f,g\}$ with $d_\C^s(f,g)>0$ (such as
+$f(n)=n$, $g(n)=2n$, which have $d_\C^s(f,g)\approx 0.347>0$) is
+\emph{not} $\psi_2$-invariant: $\psi_2$ moves it out of itself.
+The entropy of $\psi_2$ on any genuinely compact invariant set is
+therefore~$0$; non-trivial dynamical complexity of $\psi_2$
+manifests only on non-compact invariant sets.
 \end{example}
 
-\begin{example}[Counterexample: singleton set has zero entropy]
-\label{ex:entropy-zero}
-Let $K=\{f\}$ be a single function.  Then $K$ is trivially
-$\psi_\alpha$-invariant and compact, and for any $\eps>0$ the
-spanning set $E=\{f\}$ has cardinality~$1$.  Thus
-$r(n,\eps)=1$ for all~$n$, giving
-$h(\psi_\alpha|_K)=\lim\frac{1}{n}\log 1=0$.
-The hypothesis ``at least two points with $d_\C^s(f,g)>0$''
-in Proposition~\ref{prop:entropy-bound} is essential: without
-non-trivial separation in $K$, the entropy can be zero.
+\begin{example}[Singleton invariant sets]\label{ex:entropy-zero}
+Let $K=\{f\}$ for any $f\in\C$.  Then $\psi_\alpha(K)=\{\alpha f\}\ne K$
+unless $\alpha=1$, so a non-trivial singleton is not
+$\psi_\alpha$-invariant for $\alpha\ne 1$.  This is consistent with
+Proposition~\ref{prop:no-compact-invariant}: the only compact
+invariant sets are $d_\C^s$-trivial, i.e., $d_\C^s$-equivalence
+classes, which may be singletons only when the orbit is constant ---
+impossible for $\alpha\ne 1$ on distinct points.
 \end{example}
 
-\begin{example}[Entropy of a two-point invariant set]\label{ex:entropy-two-point}
-Let $f(n)=n$ and $g(n)=2n$, and let $\alpha=2$.  The orbits
-$\{\psi_2^k(f):k\in\Z\}=\{2^k n: k\in\Z\}$ and
-$\{\psi_2^k(g):k\in\Z\}=\{2^{k+1} n: k\in\Z\}$ are disjoint
-subsets of $\C$.  Consider $K$ to be the closure (in $d_\C^s$)
-of both orbits together (assuming compactness).  The backward
-iterates expand $d_\C^s$-distances by factor~$2$, so spanning
-sets must grow at least as $2^n$, giving $h\ge\log 2$.
-\end{example}
-
-\begin{proposition}[Upper bound]\label{prop:entropy-upper}
+\begin{proposition}[Finite invariant sets have zero entropy]\label{prop:entropy-upper}
 For the scaling map $\psi_\alpha$ on a finite
 $\psi_\alpha$-invariant set $K=\{f_1,\ldots,f_m\}\subset\C$, the
-topological entropy satisfies $h(\psi_\alpha|_K)\le\log m$.
+topological entropy satisfies $h(\psi_\alpha|_K)=0$.
 \end{proposition}
 
 \begin{proof}
-The set $E=K$ is trivially $(n,\eps)$-spanning for any $n$ and
-any $\eps>0$, so $r(n,\eps)\le m$ for all~$n$.  Hence
-$h(\psi_\alpha|_K)=\lim_{\eps\to 0}\limsup_{n\to\infty}
-\frac{1}{n}\log r(n,\eps)\le\lim_{\eps\to 0}\limsup_{n\to\infty}
-\frac{\log m}{n}=0$.
-In fact, the sharper bound follows from noting that $r(n,\eps)\le m$
-for all~$n$, so $\frac{1}{n}\log r(n,\eps)\le\frac{\log m}{n}\to 0$.
-Thus $h(\psi_\alpha|_K)=0$ whenever $K$ is finite.
+A finite set is a special case of a compact invariant set.  By
+Proposition~\ref{prop:no-compact-invariant}, $d_\C^s(f,g)=0$ for
+all $f,g\in K$.  Thus $K$ is a single $d_\C^s$-equivalence class,
+the only $(n,\eps)$-spanning set is $E=K$ itself (with
+$r(n,\eps)=1$ for all $n,\eps>0$), and
+$h(\psi_\alpha|_K)=\lim_{n\to\infty}\frac{1}{n}\log 1=0$.
 \end{proof}
 
-\begin{corollary}[Entropy dichotomy]\label{cor:entropy-dichotomy}
-For the scaling map $\psi_\alpha$ ($\alpha>1$):
-\begin{enumerate}[label=\textup{(\roman*)}]
-  \item If $K$ is finite, then $h(\psi_\alpha|_K)=0$.
-  \item If $K$ is an infinite compact $\psi_\alpha$-invariant set
-    containing two points with $d_\C^s(f,g)>0$, then
-    $h(\psi_\alpha|_K)\ge\log\alpha>0$.
-\end{enumerate}
-Thus there is a sharp dichotomy: the entropy is either zero (finite
-$K$) or at least $\log\alpha$ (infinite $K$ with separation).
-\end{corollary}
 
-\begin{remark}[Closing the gap]\label{rem:entropy-gap}
-For infinite compact invariant sets, the lower bound
-$h(\psi_\alpha|_K)\ge\log\alpha$ from
-Proposition~\ref{prop:entropy-bound} is likely not tight in general.
-On metric spaces, the variational principle asserts that topological
-entropy equals the supremum of measure-theoretic entropies.  An
-analogous result for quasi-metric spaces---if it could be
-established---would provide the tools to compute
-$h(\psi_\alpha|_K)$ exactly.  Whether $h(\psi_\alpha|_K)=\log\alpha$
-holds for natural infinite compact subsets of~$\C$ remains an open
-problem (see Section~\ref{sec:conclusion}).
+\begin{remark}[Entropy on non-compact sets]\label{rem:entropy-gap}
+Proposition~\ref{prop:no-compact-invariant} shows that compact
+$\psi_\alpha$-invariant sets carry zero entropy.  The natural
+question is whether a meaningful entropy invariant can be defined
+for the non-compact dynamics of $\psi_\alpha$ on all of $\C$.  On
+metric spaces, the variational principle equates topological entropy
+with the supremum of measure-theoretic entropies; an analogous
+quasi-metric version, if it could be established, might yield a
+non-trivial entropy for $\psi_\alpha|_\C$ (see Section~\ref{sec:conclusion}).
 \end{remark}
 
 An algorithm for numerically estimating the entropy via spanning
@@ -2301,9 +2296,9 @@ main results are:
     (Theorem~\ref{thm:stable-sets}): the $\delta$-stable sets of
     $\psi_\alpha$ coincide with neighbourhoods in $d_\C$ and contain
     all functions that are asymptotically at least as slow.
-  \item \textbf{Hyperbolicity} (Theorem~\ref{thm:hyperbolicity}):
-    the canonical coordinates exhibit exact exponential contraction
-    with rate $\lambda=1/\alpha$.
+  \item \textbf{Exact contraction rate} (Corollary~\ref{cor:exact-contraction}):
+    distances contract exactly by factor $1/\alpha$ per forward
+    iterate, with constant $C=1$.
   \item \textbf{Hierarchy as orbit separation}
     (Theorem~\ref{thm:hierarchy}): the time hierarchy theorem of
     Hartmanis and Stearns corresponds to orbit separation in the
@@ -2330,10 +2325,10 @@ Scaling map $\psi_\alpha$ & Uniform speed change by $\alpha$ & Def~\ref{def:scal
 Expansiveness ($\alpha\neq 1$) & Orbits eventually separate & Thm~\ref{thm:main-scaling}\\
 $\delta$-stable set & Complexity class neighbourhood & Thm~\ref{thm:stable-sets}\\
 Unstable set & All pointwise-faster functions & Thm~\ref{thm:unstable-sets}\\
-Hyperbolic contraction & $d_\C$ decays as $(1/\alpha)^n$ & Thm~\ref{thm:hyperbolicity}\\
+Exact contraction rate & $d_\C$ decays as $(1/\alpha)^n$ & Cor~\ref{cor:exact-contraction}\\
 Backward expansion & $d_\C$ grows as $\alpha^n$ & Cor~\ref{cor:backward-expansion}\\
 Orbit separation & Time hierarchy gap & Thm~\ref{thm:hierarchy}\\
-Topological entropy $\ge\log\alpha$ & Dynamical complexity bound & Prop~\ref{prop:entropy-bound}\\
+No non-trivial compact invariant sets & Entropy of $\psi_\alpha|_K$ is zero & Prop~\ref{prop:no-compact-invariant}\\
 \hline
 \end{tabular}
 \caption{Dictionary between dynamical systems and complexity theory.}
@@ -2343,10 +2338,12 @@ Topological entropy $\ge\log\alpha$ & Dynamical complexity bound & Prop~\ref{pro
 \textbf{Open problems.}
 Several directions suggest themselves for future investigation.
 
-\emph{Topological entropy.}  We have given preliminary estimates
-(Section~\ref{sec:entropy}), but a complete calculation of the
-topological entropy of $\psi_\alpha$ on natural compact subsets of
-$\C$ remains open.
+\emph{Topological entropy.}  Proposition~\ref{prop:no-compact-invariant}
+shows that compact $\psi_\alpha$-invariant sets are $d_\C^s$-trivial,
+so standard Bowen entropy vanishes on them.  Defining a meaningful
+entropy invariant for the non-compact dynamics of $\psi_\alpha$ on
+all of $\C$ --- for instance via asymmetric or volume-growth
+entropy analogues --- remains open.
 
 \emph{Non-linear transformations.}  The scaling map is linear in
 the function values.  It would be interesting to study non-linear
@@ -2448,6 +2445,10 @@ The author thanks \textit{[acknowledgements to be added]}.
 
 \bibitem{utz1950} W.~R.~Utz, Unstable homeomorphisms, \textit{Proc.\
   Amer.\ Math.\ Soc.}\ 1 (1950), 769--774.
+
+\bibitem{walters1982} P.~Walters, \textit{An Introduction to Ergodic
+  Theory}, Graduate Texts in Mathematics, vol.~79, Springer-Verlag,
+  1982.
 
 \end{thebibliography}
 

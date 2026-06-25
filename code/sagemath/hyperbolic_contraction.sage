@@ -20,12 +20,10 @@ for k in range(1, 5):
 # --- Backward expansion: d_C(n^2, n) under psi_3 ----------
 d_base = sum(2^(-n) * (n - 1) / n^2, n, 2, +Infinity)
 print("\n=== Backward expansion (alpha=3) ===")
-for k in range(0, 5):
+for k in range(0, 6):
     dk = 3^k * d_base
-    capped = min(float(numerical_approx(dk)), 1.0)
     print(f"d_C(psi_3^{{-{k}}}(n^2), psi_3^{{-{k}}}(n))"
-          f" = {3^k}*d0 = {float(numerical_approx(dk)):.4f}"
-          f"  (actual: {capped:.4f})")
+          f" = {3^k}*d0 = {float(numerical_approx(dk)):.4f}")
 
 # --- Numerical hyperbolicity: d_C(n^2, n) under psi_2 -----
 print("\n=== Forward contraction (alpha=2) ===")
